@@ -21,10 +21,10 @@ class Graph:
     
     def saveGraphToFile(self, filename):
         aux = dict(self.graph)
-        with open(filename, "a") as f:
+        with open(filename, "w") as f:
             for node in aux:
                 for viz in aux[node]:
-                    string = node + " " + viz
+                    string = str(node) + " " + str(viz) +"\n"
                     f.write(string)
                     if node in aux[viz]:
                         aux[viz].remove(node)
@@ -71,6 +71,7 @@ class Graph:
     def clusterringCoeff(self, node):
         if(node in self.graph):
             neig = len(self.graph[node])
+            if neig <=1: return 0
             cluster = self.edgesBetweenNeig(node) / ( neig * ( neig - 1 ) / 2 )
         return cluster
 
@@ -129,21 +130,21 @@ class Graph:
         plt.plot(range(len(self.degree)), list(self.degree.values()), 'og')
         plt.show()
 
-# x = Graph()
+#x = Graph()
 # x.addEdge(0,1)
 # x.addEdge(2,3)
 # x.addEdge(0,2)
-# x.loadGraphFromFile("aves-weaver-social-01.edges")
-# print(x.adjencyList())
-# print(x.degrees())
-# print("Number of edges : ",x.numEdges)
-# print("Number of nodes : ",len(x.graph))
-# print("Average degree: ", x.averageDegree())
-# print("Cluster of node 22: ", x.clusterringCoeff("22") )
-# print("Average Cluster: ", x.averageClust() )
-# print("Path from 19 to 25", list(x.bfs("19","25")))
-# print("Average path lenght of node 19 ", x.nodePathLength("19"))
-# print("Average path lenght: ", x.averagePathLength())
+#x.loadGraphFromFile("erdos.edges")
+#print(x.adjencyList())
+#print(x.degrees())
+#print("Number of edges : ",x.numEdges)
+#print("Number of nodes : ",len(x.graph))
+#print("Average degree: ", x.averageDegree())
+#print("Cluster of node 0: ", x.clusterringCoeff("0") )
+#print("Average Cluster: ", x.averageClust() )
+#print("Path from 1 to 8", list(x.bfs("0","8")))
+#print("Average path lenght of node 11 ", x.nodePathLength("11"))
+#print("Average path lenght: ", x.averagePathLength())
 # #x.draw()
 # x.removeEdge(0,1)
 # x.removeEdge(0,2)
