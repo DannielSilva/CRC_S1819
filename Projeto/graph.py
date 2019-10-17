@@ -118,7 +118,7 @@ class Graph:
         plt.plot(range(len(self.degree)), list(self.degree.values()), 'og')
         plt.show()
 
-#x = Graph()
+# x = Graph()
 # x.addEdge(0,1)
 # x.addEdge(2,3)
 # x.addEdge(0,2)
