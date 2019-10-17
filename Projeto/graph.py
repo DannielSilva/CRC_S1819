@@ -54,18 +54,20 @@ class Graph:
         plt.xticks(range(len(self.degree)), list(self.degree.keys()))
         plt.show()
 
+    def degree_dist(self):
+        plt.plot(range(len(self.degree)), list(self.degree.values()), 'og')
+        plt.show()
 
-
-x = Graph()
+# x = Graph()
 # x.addEdge(0,1)
 # x.addEdge(2,3)
 # x.addEdge(0,2)
-x.loadGraphFromFile("aves-weaver-social-01.edges")
-print(x.adjencyList())
-print(x.degrees())
-print(x.numEdges)
+# x.loadGraphFromFile("aves-weaver-social-01.edges")
+# print(x.adjencyList())
+# print(x.degrees())
+# print(x.numEdges)
 # print("removing")
-# #x.draw()
+# x.degree_dist()
 # x.removeEdge(0,1)
 # x.removeEdge(0,2)
 # print(x.adjencyList())
