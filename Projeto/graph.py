@@ -18,6 +18,17 @@ class Graph:
                 print(pair)
                 self.addEdge(pair[0], pair[1])
                 edge = f.readline()
+    
+    def saveGraphToFile(self, filename):
+        aux = dict(self.graph)
+        with open(filename, "a") as f:
+            for node in aux:
+                for viz in aux[node]:
+                    string = node + " " + viz
+                    f.write(string)
+                    if node in aux[viz]:
+                        aux[viz].remove(node)
+        f.close()
 
     def addEdge(self, begin, end):
         if begin not in self.graph or (begin in self.graph and end not in self.graph[begin]):
