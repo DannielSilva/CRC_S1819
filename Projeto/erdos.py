@@ -12,19 +12,23 @@ class Erdos_Renyi_Graph(graph.Graph):
             for node2 in range(self.numNodes):
                 if node != node2:
                     if random.random() <= self.prob:
-                        if node not in self.graph or (node in self.graph and node2 not in self.graph[node]):
-                            print("bruna")
-                            self.addEdge(node, node2)
+                        print("bruna")
+                        self.addEdge(node, node2)
             if node not in self.graph:
                 self.graph[node] = []
                 self.degree[node] = 0
 
     def avg_numEdges(self):
-        return len(self.graph) * (len(self.graph) - 1) // 2
+        return len(self.graph) * (len(self.graph) - 1) // 2 * self.prob
 
-x = Erdos_Renyi_Graph(1, 5)
+    def avg_degree(self):
+        return self.prob * (len(self.graph) - 1)
+
+x = Erdos_Renyi_Graph(1/6, 12)
 x.build()
 print(x.graph)
 print(x.degrees())
 print(x.avg_numEdges())
 print(x.numEdges)
+print("<k>", x.avg_degree())
+x.degree_dist()
