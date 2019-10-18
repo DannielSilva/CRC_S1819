@@ -7,6 +7,7 @@ class Graph:
     numEdges = 0
     graph = {}
     degree = {}
+    lenCounts = {}
     undirected = True
     backEdge = True
     distance = 0
@@ -111,19 +112,22 @@ class Graph:
                 else:
                     queue.append((nxt, path + [nxt]))
 
+    #Dont forget to check if length is != 0 in line "here" to make sure that averagePathLenght is correct
     def nodePathLength(self, begin):
         sum = 0
         vistos = {}
-        lenght = 0
         for node in self.graph:
+            ll = 0
             if (node,begin) in vistos:
                 sum += vistos[(begin,node)]
             if node != begin:
-                ll = len(list(self.bfs(begin, node)))
-                print("length",ll)
-                print("len", len(list(self.bfs(begin, node))))
-                sum += ll
-                vistos[(begin,node)] = ll
+                ll += len(list(self.bfs(begin, node))) #here
+                sum += ll #here
+                vistos[(begin,node)] = ll #here
+                if(ll in self.lenCounts):
+                    self.lenCounts[ll] += 1
+                else:
+                    self.lenCounts[ll] = 1
         return sum
 
     def averagePathLength(self):
@@ -132,6 +136,7 @@ class Graph:
             sum += self.nodePathLength(node)
         return sum / (len(self.graph) * (len(self.graph) - 1)) 
 
+        
 
     def adjencyList(self):
         return self.graph
@@ -160,13 +165,18 @@ class Graph:
         return info
 
     def plot_info(self, info):
-        plt.plot(range(len(info)), list(info.values()), 'og')
+        plt.plot(list(info.keys()), list(info.values()), 'og')
         plt.show()
-#x = Graph()
+
+
+x = Graph()
 # x.addEdge(0,1)
 # x.addEdge(2,3)
 # x.addEdge(0,2)
-#x.loadGraphFromFile("erdos.edges")
+x.loadGraphFromFile("erdos.edges")
+print("Average path lenght: ", x.averagePathLength())
+print(x.lenCounts)
+x.plot_info(x.lenCounts)
 #print(x.adjencyList())
 #print(x.degrees())
 #print("Number of edges : ",x.numEdges)
