@@ -119,9 +119,11 @@ class Graph:
             if (node,begin) in vistos:
                 sum += vistos[(begin,node)]
             if node != begin:
-                length = len(list(self.bfs(begin, node)))
-                sum += len(list(self.bfs(begin, node)))
-                vistos[(begin,node)] = lenght
+                ll = len(list(self.bfs(begin, node)))
+                print("length",ll)
+                print("len", len(list(self.bfs(begin, node))))
+                sum += ll
+                vistos[(begin,node)] = ll
         return sum
 
     def averagePathLength(self):

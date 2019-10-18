@@ -3,6 +3,7 @@ import random
 import matplotlib.pyplot as plt
 from scipy.stats import binom, poisson
 from numpy import linspace, arange
+from math import log
 
 class Erdos_Renyi_Graph(graph.Graph):
 
@@ -32,7 +33,7 @@ class Erdos_Renyi_Graph(graph.Graph):
         degrees = list(degree_dist.keys())
         print("----", len(degrees))
         print("----", len(degree_dist))
-        plt.scatter(degrees, list(degree_dist.values()))
+        plt.scatter(degrees, list(degree_dist.values()), label=f'degree')
 
         x_binom = arange(
             binom.ppf(0.01, self.numNodes - 1, self.prob),
@@ -40,7 +41,7 @@ class Erdos_Renyi_Graph(graph.Graph):
         )
         plt.plot(x_binom,
                           binom.pmf(x_binom, self.numNodes - 1, self.prob), 'g',
-                          label='binomial')
+                          label=f'binomial')
         
         poisson_average = (self.numNodes - 1) * self.prob
         x_poisson = arange(
@@ -49,6 +50,7 @@ class Erdos_Renyi_Graph(graph.Graph):
         )
         plt.plot(x_poisson, poisson.pmf(x_poisson, poisson_average), label=f'poisson')
         #plt.legend(["Poisson", "Binomial", "Degree"], loc='best', fancybox = True, shadow = True)
+        plt.legend(loc='best', frameon=False)
         plt.show()
         
         # print(degree_dist)
@@ -78,7 +80,10 @@ class Erdos_Renyi_Graph(graph.Graph):
         # plt.plot(list(degree_dist.keys()), list(degree_dist.values()), 'og')
         # plt.plot(list(degree_dist.keys()), norm.pdf(list(degree_dist.values()), mean, sigma))
         # plt.show()
-x = Erdos_Renyi_Graph(1/6, 2000)
+    
+    def small_world(self):
+        return log(len(self.graph)) / log(self.averageDegree())
+x = Erdos_Renyi_Graph(1/6, 100)
 x.build()
 #print(x.graph)
 #print(x.degrees())
@@ -86,6 +91,9 @@ print(x.avg_numEdges())
 print(x.numEdges)
 print("<k> expected", x.expected_avg_degree())
 print("<k> real", x.averageDegree())
+print("Average path lenght: ", x.averagePathLength())
+print("distance: ", x.distance)
+print("small world: ", x.small_world())
 #print(list(x.graph))
 #x.saveGraphToFile("erdos.edges")
 x.degree_dist()
