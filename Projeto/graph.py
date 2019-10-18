@@ -127,7 +127,6 @@ class Graph:
             sum += self.nodePathLength(node)
         return sum / (len(self.graph) * (len(self.graph) - 1)) 
 
-
     def adjencyList(self):
         return self.graph
 
@@ -142,6 +141,7 @@ class Graph:
     def degree_dist(self):
         plt.plot(range(len(self.degree)), list(self.degree.values()), 'og')
         plt.show()
+
 
 x = Graph()
 # x.addEdge(0,1)
