@@ -9,6 +9,7 @@ class Graph:
     degree = {}
     undirected = True
     backEdge = True
+    distance = 0
     
     def loadGraphFromFile(self, filename):
         with open(filename) as f:
@@ -95,6 +96,8 @@ class Graph:
             here = [x for x in self.graph[v] if x not in path]
             for nxt in here:
                 if nxt == end:
+                    if len(path) > self.distance:
+                        self.distance = len(path)
                     return path 
                 else:
                     queue.append((nxt, path + [nxt]))
@@ -126,10 +129,24 @@ class Graph:
         plt.xticks(range(len(self.degree)), list(self.degree.keys()))
         plt.show()
 
-    def degree_dist(self):
-        plt.plot(range(len(self.degree)), list(self.degree.values()), 'og')
+    def graph_degree_eachnode(self):
+        self.plot_info(self.degree)
         plt.show()
+    
+    def degree_dist(self):
+        info = {}
+        for node, degree in self.degree.items():
+            if degree in info:
+                info[degree] +=1
+            else:
+                info[degree] = 1
+        info.update({degree: occurence / (len(self.graph)) for degree, occurence in info.items()})
+        self.plot_info(info)
+        return info
 
+    def plot_info(self, info):
+        plt.plot(range(len(info)), list(info.values()), 'og')
+        plt.show()
 #x = Graph()
 # x.addEdge(0,1)
 # x.addEdge(2,3)
@@ -145,7 +162,9 @@ class Graph:
 #print("Path from 1 to 8", list(x.bfs("0","8")))
 #print("Average path lenght of node 11 ", x.nodePathLength("11"))
 #print("Average path lenght: ", x.averagePathLength())
+#print("distance: ", x.distance)
 # #x.draw()
+#x.degree_dist()
 # x.removeEdge(0,1)
 # x.removeEdge(0,2)
 # print(x.adjencyList())
