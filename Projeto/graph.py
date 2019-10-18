@@ -15,7 +15,6 @@ class Graph:
             edge = f.readline()
             while edge:
                 pair = edge.split()
-                print(pair)
                 self.addEdge(pair[0], pair[1])
                 edge = f.readline()
     
@@ -111,11 +110,15 @@ class Graph:
 
     def nodePathLength(self, begin):
         sum = 0
+        vistos = {}
+        lenght = 0
         for node in self.graph:
+            if (node,begin) in vistos:
+                sum += vistos[(begin,node)]
             if node != begin:
-                print("node: ", node)
+                length = len(list(self.bfs(begin, node)))
                 sum += len(list(self.bfs(begin, node)))
-                print("path : ", list(self.bfs(begin, node)))
+                vistos[(begin,node)] = lenght
         return sum
 
     def averagePathLength(self):
@@ -140,11 +143,11 @@ class Graph:
         plt.plot(range(len(self.degree)), list(self.degree.values()), 'og')
         plt.show()
 
-#x = Graph()
+x = Graph()
 # x.addEdge(0,1)
 # x.addEdge(2,3)
 # x.addEdge(0,2)
-#x.loadGraphFromFile("erdos.edges")
+x.loadGraphFromFile("erdos.edges")
 #print(x.adjencyList())
 #print(x.degrees())
 #print("Number of edges : ",x.numEdges)
@@ -154,7 +157,7 @@ class Graph:
 #print("Average Cluster: ", x.averageClust() )
 #print("Path from 1 to 8", list(x.bfs("0","8")))
 #print("Average path lenght of node 11 ", x.nodePathLength("11"))
-#print("Average path lenght: ", x.averagePathLength())
+print("Average path lenght: ", x.averagePathLength())
 # #x.draw()
 # x.removeEdge(0,1)
 # x.removeEdge(0,2)

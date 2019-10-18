@@ -21,8 +21,8 @@ class Barabasi_Albert_Graph(graph.Graph):
                 no = no[0]
                 n = self.addEdge(node, no)
                 print("Trying to connect ", node, no)
-                print("With probability ", probability[no])
-                print("Probability ", probability)
+                #print("With probability ", probability[no])
+                #print("Probability ", probability)
 
                 if(n != -1):
                     print("Connected")
@@ -41,7 +41,7 @@ class Barabasi_Albert_Graph(graph.Graph):
 
 
 
-x = Barabasi_Albert_Graph(3,2,10)
+x = Barabasi_Albert_Graph(8,7,10000)
 x.build()
 print(x.graph)
 print(x.degrees())

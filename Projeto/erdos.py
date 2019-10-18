@@ -24,8 +24,8 @@ class Erdos_Renyi_Graph(graph.Graph):
     def expected_avg_degree(self):
         return self.prob * (len(self.graph) - 1)
 
-# x = Erdos_Renyi_Graph(1/6, 1000)
-# x.build()
+x = Erdos_Renyi_Graph(1/6, 100)
+x.build()
 # #print(x.graph)
 # #print(x.degrees())
 # print(x.avg_numEdges())
@@ -34,5 +34,5 @@ class Erdos_Renyi_Graph(graph.Graph):
 # print("<k> real", x.averageDegree())
 # print("clust: ", x.averageClust())
 # #print(list(x.graph))
-# #x.saveGraphToFile("erdos.edges")
+x.saveGraphToFile("erdos.edges")
 # x.degree_dist()
