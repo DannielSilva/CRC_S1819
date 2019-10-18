@@ -16,7 +16,6 @@ class Graph:
             edge = f.readline()
             while edge:
                 pair = edge.split()
-                print(pair)
                 self.addEdge(pair[0], pair[1])
                 edge = f.readline()
     
@@ -38,6 +37,8 @@ class Graph:
         
             if self.undirected:
                 self.addEdge_aux(end, begin)
+        else:
+            return -1
 
     def addEdge_aux(self, begin, end):
         if begin in self.graph:
@@ -60,6 +61,14 @@ class Graph:
     
     def averageDegree(self):
         return 2 * self.numEdges / len(self.graph)
+
+    def sumDegree(self):
+        sum = 0
+        for node in self.degree:
+            sum += self.degree[node]
+        return sum
+        
+
 
     def averageClust(self):
         count = 0
@@ -104,11 +113,15 @@ class Graph:
 
     def nodePathLength(self, begin):
         sum = 0
+        vistos = {}
+        lenght = 0
         for node in self.graph:
+            if (node,begin) in vistos:
+                sum += vistos[(begin,node)]
             if node != begin:
-                print("node: ", node)
+                length = len(list(self.bfs(begin, node)))
                 sum += len(list(self.bfs(begin, node)))
-                print("path : ", list(self.bfs(begin, node)))
+                vistos[(begin,node)] = lenght
         return sum
 
     def averagePathLength(self):
