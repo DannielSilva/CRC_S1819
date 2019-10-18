@@ -7,8 +7,10 @@ class Graph:
     numEdges = 0
     graph = {}
     degree = {}
+    lenCounts = {}
     undirected = True
     backEdge = True
+    distance = 0
     
     def loadGraphFromFile(self, filename):
         with open(filename) as f:
@@ -104,21 +106,28 @@ class Graph:
             here = [x for x in self.graph[v] if x not in path]
             for nxt in here:
                 if nxt == end:
+                    if len(path) > self.distance:
+                        self.distance = len(path)
                     return path 
                 else:
                     queue.append((nxt, path + [nxt]))
 
+    #Dont forget to check if length is != 0 in line "here" to make sure that averagePathLenght is correct
     def nodePathLength(self, begin):
         sum = 0
         vistos = {}
-        lenght = 0
         for node in self.graph:
+            ll = 0
             if (node,begin) in vistos:
                 sum += vistos[(begin,node)]
             if node != begin:
-                length = len(list(self.bfs(begin, node)))
-                sum += len(list(self.bfs(begin, node)))
-                vistos[(begin,node)] = lenght
+                ll += len(list(self.bfs(begin, node))) #here
+                sum += ll #here
+                vistos[(begin,node)] = ll #here
+                if(ll in self.lenCounts):
+                    self.lenCounts[ll] += 1
+                else:
+                    self.lenCounts[ll] = 1
         return sum
 
     def averagePathLength(self):
@@ -126,6 +135,8 @@ class Graph:
         for node in self.graph:
             sum += self.nodePathLength(node)
         return sum / (len(self.graph) * (len(self.graph) - 1)) 
+
+        
 
     def adjencyList(self):
         return self.graph
@@ -138,8 +149,23 @@ class Graph:
         plt.xticks(range(len(self.degree)), list(self.degree.keys()))
         plt.show()
 
+    def graph_degree_eachnode(self):
+        self.plot_info(self.degree)
+        plt.show()
+    
     def degree_dist(self):
-        plt.plot(range(len(self.degree)), list(self.degree.values()), 'og')
+        info = {}
+        for node, degree in self.degree.items():
+            if degree in info:
+                info[degree] +=1
+            else:
+                info[degree] = 1
+        info.update({degree: occurence / (len(self.graph)) for degree, occurence in info.items()})
+        self.plot_info(info)
+        return info
+
+    def plot_info(self, info):
+        plt.plot(range(len(info)), list(info.values()), 'og')
         plt.show()
 
 
@@ -148,6 +174,9 @@ x = Graph()
 # x.addEdge(2,3)
 # x.addEdge(0,2)
 x.loadGraphFromFile("erdos.edges")
+print("Average path lenght: ", x.averagePathLength())
+print(x.lenCounts)
+x.plot_info(x.lenCounts)
 #print(x.adjencyList())
 #print(x.degrees())
 #print("Number of edges : ",x.numEdges)
@@ -157,8 +186,10 @@ x.loadGraphFromFile("erdos.edges")
 #print("Average Cluster: ", x.averageClust() )
 #print("Path from 1 to 8", list(x.bfs("0","8")))
 #print("Average path lenght of node 11 ", x.nodePathLength("11"))
-print("Average path lenght: ", x.averagePathLength())
+#print("Average path lenght: ", x.averagePathLength())
+#print("distance: ", x.distance)
 # #x.draw()
+#x.degree_dist()
 # x.removeEdge(0,1)
 # x.removeEdge(0,2)
 # print(x.adjencyList())
