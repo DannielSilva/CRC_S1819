@@ -37,6 +37,8 @@ class Graph:
         
             if self.undirected:
                 self.addEdge_aux(end, begin)
+        else:
+            return -1
 
     def addEdge_aux(self, begin, end):
         if begin in self.graph:
@@ -59,6 +61,14 @@ class Graph:
     
     def averageDegree(self):
         return 2 * self.numEdges / len(self.graph)
+
+    def sumDegree(self):
+        sum = 0
+        for node in self.degree:
+            sum += self.degree[node]
+        return sum
+        
+
 
     def averageClust(self):
         count = 0
