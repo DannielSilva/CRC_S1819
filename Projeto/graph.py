@@ -165,7 +165,7 @@ class Graph:
         return info
 
     def plot_info(self, info):
-        plt.plot(range(len(info)), list(info.values()), 'og')
+        plt.plot(list(info.keys()), list(info.values()), 'og')
         plt.show()
 
 
