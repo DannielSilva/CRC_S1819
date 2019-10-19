@@ -1,6 +1,9 @@
 import graph
 import random
 import erdos
+import matplotlib.pyplot as plt
+from scipy.stats import linregress
+from math import log
 
 class Barabasi_Albert_Graph(graph.Graph):
 
@@ -10,6 +13,7 @@ class Barabasi_Albert_Graph(graph.Graph):
         self.initNodes = initNodes
         mm = erdos.Erdos_Renyi_Graph(1,initNodes)
         mm.build()
+        print(mm.graph)
         self.graph = mm.graph
 
     def build(self):
@@ -38,14 +42,22 @@ class Barabasi_Albert_Graph(graph.Graph):
             prob.append(self.degree[node] / self.sumDegree())
         return prob
 
+    def loglogplot(self, info):
+        x = list(info.keys())
+        y = list(info.values())
+        plt.loglog(x, y, 'og')
+        plt.show()
+        x = [log(k) for k in info.keys()]
+        y = [log(v) for v in info.values()]
+        print(linregress(x ,y))
 
-
-
-x = Barabasi_Albert_Graph(8,7,10000)
+x = Barabasi_Albert_Graph(2,2,1000)
 x.build()
 print(x.graph)
 print(x.degrees())
 print(x.numEdges)
+#degs = x.degree_dist()
+#x.loglogplot(degs)
 # print("<k> expected", x.expected_avg_degree())
 # print("<k> real", x.averageDegree())
 # print("clust: ", x.averageClust())
