@@ -1,6 +1,7 @@
 import graph
 import random
 import erdos
+import numpy as np
 
 class Barabasi_Albert_Graph(graph.Graph):
 
@@ -41,11 +42,20 @@ class Barabasi_Albert_Graph(graph.Graph):
 
 
 
-x = Barabasi_Albert_Graph(8,7,10000)
+x = Barabasi_Albert_Graph(8,7,1000)
 x.build()
 print(x.graph)
+print("Nodes: ", len(x.graph))
+print("Expected: ", x.initNodes + x.numNodesAdded )
 print(x.degrees())
-print(x.numEdges)
+print("Edges: ",x.numEdges)
+print("Expected: ", x.m * x.numNodesAdded )
+print("<k> real: ", x.averageDegree())
+print("<k> expected: ", 2 * x.m)
+print("APL: ", x.averagePathLength())
+print("APL expected", np.log(len(x.graph)) / (np.log(np.log(len(x.graph))) ))
+print("clust real: ", x.averageClust())
+print("clust expected: ", ( np.log(len(x.graph)) )**2 / len(x.graph))
 # print("<k> expected", x.expected_avg_degree())
 # print("<k> real", x.averageDegree())
 # print("clust: ", x.averageClust())
