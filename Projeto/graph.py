@@ -11,6 +11,7 @@ class Graph:
     undirected = True
     backEdge = True
     distance = 0
+    discovered = {}
     
     def loadGraphFromFile(self, filename):
         with open(filename) as f:
@@ -111,19 +112,22 @@ class Graph:
                     return path 
                 else:
                     queue.append((nxt, path + [nxt]))
+        return []
 
     #Dont forget to check if length is != 0 in line "here" to make sure that averagePathLenght is correct
     def nodePathLength(self, begin):
         sum = 0
-        vistos = {}
+        
         for node in self.graph:
             ll = 0
-            if (node,begin) in vistos:
-                sum += vistos[(begin,node)]
-            if node != begin:
+            key = str(node) + "-" + str(begin) 
+            if key in self.discovered:
+                sum += self.discovered[key]
+            elif node != begin:
                 ll += len(list(self.bfs(begin, node))) #here
                 sum += ll #here
-                vistos[(begin,node)] = ll #here
+                index = str(begin) + "-" + str(node)
+                self.discovered[index] = ll #here
                 if(ll in self.lenCounts):
                     self.lenCounts[ll] += 1
                 else:
@@ -169,25 +173,25 @@ class Graph:
         plt.show()
 
 
-#x = Graph()
-# x.addEdge(0,1)
-# x.addEdge(2,3)
-# x.addEdge(0,2)
-#x.loadGraphFromFile("erdos.edges")
-#print("Average path lenght: ", x.averagePathLength())
-#print(x.lenCounts)
-#x.plot_info(x.lenCounts)
-#print(x.adjencyList())
-#print(x.degrees())
-#print("Number of edges : ",x.numEdges)
-#print("Number of nodes : ",len(x.graph))
-#print("Average degree: ", x.averageDegree())
-#print("Cluster of node 0: ", x.clusterringCoeff("0") )
-#print("Average Cluster: ", x.averageClust() )
-#print("Path from 1 to 8", list(x.bfs("0","8")))
-#print("Average path lenght of node 11 ", x.nodePathLength("11"))
-#print("Average path lenght: ", x.averagePathLength())
-#print("distance: ", x.distance)
+# x = Graph()
+# # x.addEdge(0,1)
+# # x.addEdge(2,3)
+# # x.addEdge(0,2)
+# x.loadGraphFromFile("erdos.edges")
+# #print("Average path lenght: ", x.averagePathLength())
+# #print(x.lenCounts)
+# #x.plot_info(x.lenCounts)
+# #print(x.adjencyList())
+# #print(x.degrees())
+# print("Number of edges : ",x.numEdges)
+# print("Number of nodes : ",len(x.graph))
+# print("Average degree: ", x.averageDegree())
+# #print("Cluster of node 0: ", x.clusterringCoeff("0") )
+# print("Average Cluster: ", x.averageClust() )
+# #print("Path from 1 to 8", list(x.bfs("0","8")))
+# #print("Average path lenght of node 11 ", x.nodePathLength("11"))
+# print("Average path lenght: ", x.averagePathLength())
+# print("distance: ", x.distance)
 # #x.draw()
 #x.degree_dist()
 # x.removeEdge(0,1)

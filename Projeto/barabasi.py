@@ -3,7 +3,7 @@ import random
 import erdos
 import matplotlib.pyplot as plt
 from scipy.stats import linregress
-from math import log
+import numpy as np
 
 class Barabasi_Albert_Graph(graph.Graph):
 
@@ -47,17 +47,27 @@ class Barabasi_Albert_Graph(graph.Graph):
         y = list(info.values())
         plt.loglog(x, y, 'og')
         plt.show()
-        x = [log(k) for k in info.keys()]
-        y = [log(v) for v in info.values()]
+        x = np.log(x)
+        y = np.log(y)
         print(linregress(x ,y))
 
-x = Barabasi_Albert_Graph(2,2,1000)
+x = Barabasi_Albert_Graph(10,6,500)
 x.build()
+x.saveGraphToFile("bara.edges")
 print(x.graph)
+print("Nodes: ", len(x.graph))
+print("Expected: ", x.initNodes + x.numNodesAdded )
 print(x.degrees())
-print(x.numEdges)
-#degs = x.degree_dist()
-#x.loglogplot(degs)
+degs = x.degree_dist()
+x.loglogplot(degs)
+print("Edges: ",x.numEdges)
+print("Expected: ", x.m * x.numNodesAdded )
+print("<k> real: ", x.averageDegree())
+print("<k> expected: ", 2 * x.m)
+print("clust real: ", x.averageClust())
+print("clust expected: ", ( np.log(len(x.graph)) )**2 / len(x.graph))
+print("APL: ", x.averagePathLength())
+print("APL expected", np.log(len(x.graph)) / (np.log(np.log(len(x.graph))) ))
 # print("<k> expected", x.expected_avg_degree())
 # print("<k> real", x.averageDegree())
 # print("clust: ", x.averageClust())
