@@ -43,33 +43,29 @@ class Barabasi_Albert_Graph(graph.Graph):
         return ((np.log(len(self.graph)) )**2 / len(self.graph))
     
     def expected_avg_path(self):
-        return np.log(len(self.graph)) / (np.log(np.log(len(self.x.graph))) )
+        return np.log(len(self.graph)) / (np.log(np.log(len(self.graph))) )
 
     def expected_avg_degree(self):
         return  2 * self.m
 
-    def expected_nodes(self):
-        return  self.initNodes + self.numNodesAdded
 
-
-
-x = Barabasi_Albert_Graph(8,7,1000)
+x = Barabasi_Albert_Graph(10,5,1500)
 x.build()
-print(x.graph)
+x.saveGraphToFile("barabasi1500.edges")
 print("Nodes: ", len(x.graph))
 print("Expected: ", x.initNodes + x.numNodesAdded )
-print(x.degrees())
-print("Edges: ", x.numEdges)
-print("Expected: ", x.m * x.numNodesAdded )
-print("<k> real: ", x.averageDegree())
+# print(x.degrees())
+# print("Edges: ", x.numEdges)
+# print("Expected: ", x.m * x.numNodesAdded )
+# print("<k> real: ", x.averageDegree())
 print("<k> expected 2 * m : ",x.expected_avg_degree())
-print("APL: ", x.averagePathLength())
+# print("APL: ", x.averagePathLength())
 print("APL expected ln(N)/ln(ln(N)) : ", x.expected_avg_path())
-print("clust real: ", x.averageClust())
+# print("clust real: ", x.averageClust())
 print("clust expected ln(N)^2 / N : ", x.expected_clust())
-# print("<k> expected", x.expected_avg_degree())
-# print("<k> real", x.averageDegree())
-# print("clust: ", x.averageClust())
-# #print(list(x.graph))
-# #x.saveGraphToFile("erdos.edges")
-# x.degree_dist()
+# # print("<k> expected", x.expected_avg_degree())
+# # print("<k> real", x.averageDegree())
+# # print("clust: ", x.averageClust())
+# # #print(list(x.graph))
+# # #x.saveGraphToFile("erdos.edges")
+# # x.degree_dist()
