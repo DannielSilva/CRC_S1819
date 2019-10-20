@@ -88,17 +88,15 @@ class Graph:
         return cluster
 
     def edgesBetweenNeig(self,node):
-        edges = []
+        edges = 0
         if(node in self.graph):
             for viz in self.graph[node]:
                 if(viz in self.graph):
                     for vizOfviz in self.graph[viz]:
-                        if(vizOfviz in self.graph[node]):
-                            if((viz,vizOfviz) not in edges):
-                                if((vizOfviz, viz) not in edges):
-                                    edges.append((viz,vizOfviz))                    
+                        if viz < vizOfviz and vizOfviz in self.graph[node]:
+                            edges += 1                   
                             
-        return len(edges)
+        return edges
 
     def bfs(self, begin, end):
         queue = [ (begin, [begin])]
@@ -108,26 +106,44 @@ class Graph:
             for nxt in here:
                 if nxt == end:
                     if len(path) > self.distance:
+                        print("len,distace",len(path), self.distance)
                         self.distance = len(path)
                     return path 
                 else:
                     queue.append((nxt, path + [nxt]))
         return []
 
-    #Dont forget to check if length is != 0 in line "here" to make sure that averagePathLenght is correct
+    # #Dont forget to check if length is != 0 in line "here" to make sure that averagePathLenght is correct
+    # def nodePathLength(self, begin):
+    #     sum = 0
+        
+    #     for node in self.graph:
+    #         ll = 0
+    #         key = str(node) + "-" + str(begin) 
+    #         if key in self.discovered:
+    #             sum += self.discovered[key]
+    #         elif node != begin:
+    #             ll += len(list(self.bfs(begin, node))) #here
+    #             sum += ll #here
+    #             index = str(begin) + "-" + str(node)
+    #             self.discovered[index] = ll #here
+    #             if(ll in self.lenCounts):
+    #                 self.lenCounts[ll] += 1
+    #             else:
+    #                 self.lenCounts[ll] = 1
+    #     return sum
+
     def nodePathLength(self, begin):
         sum = 0
-        
+        vistos = {}
         for node in self.graph:
             ll = 0
-            key = str(node) + "-" + str(begin) 
-            if key in self.discovered:
-                sum += self.discovered[key]
-            elif node != begin:
+            if (node,begin) in vistos:
+                sum += vistos[(begin,node)]
+            if node != begin:
                 ll += len(list(self.bfs(begin, node))) #here
                 sum += ll #here
-                index = str(begin) + "-" + str(node)
-                self.discovered[index] = ll #here
+                vistos[(begin,node)] = ll #here
                 if(ll in self.lenCounts):
                     self.lenCounts[ll] += 1
                 else:
@@ -172,26 +188,25 @@ class Graph:
         plt.plot(list(info.keys()), list(info.values()), 'og')
         plt.show()
 
-
-# x = Graph()
+#x = Graph()
 # # x.addEdge(0,1)
 # # x.addEdge(2,3)
 # # x.addEdge(0,2)
-# x.loadGraphFromFile("erdos.edges")
-# #print("Average path lenght: ", x.averagePathLength())
+#x.loadGraphFromFile("erdos.edges")
 # #print(x.lenCounts)
 # #x.plot_info(x.lenCounts)
 # #print(x.adjencyList())
 # #print(x.degrees())
 # print("Number of edges : ",x.numEdges)
 # print("Number of nodes : ",len(x.graph))
-# print("Average degree: ", x.averageDegree())
+#print("Average degree: ", x.averageDegree())
 # #print("Cluster of node 0: ", x.clusterringCoeff("0") )
-# print("Average Cluster: ", x.averageClust() )
+#print("Average Cluster: ", x.averageClust() )
+#print("Average path lenght: ", x.averagePathLength())
 # #print("Path from 1 to 8", list(x.bfs("0","8")))
 # #print("Average path lenght of node 11 ", x.nodePathLength("11"))
 # print("Average path lenght: ", x.averagePathLength())
-# print("distance: ", x.distance)
+#print("distance: ", x.distance)
 # #x.draw()
 #x.degree_dist()
 # x.removeEdge(0,1)
