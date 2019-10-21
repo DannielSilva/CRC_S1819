@@ -84,6 +84,8 @@ class Erdos_Renyi_Graph(graph.Graph):
     
     def small_world(self):
         return log(len(self.graph)) / log(self.averageDegree())
+
+    
 x = Erdos_Renyi_Graph(1/6, 500)
 x.build()
 x.saveGraphToFile("erdos.edges")
@@ -110,6 +112,7 @@ dict_clust[1500] = 0.04
 dict_clust[2000] = 0.035
 dict_clust[3000] = 0.025
 x.plot_info(dict_clust)
+x.loglogplot("clust",dict_clust)
 
 dict_apl = {}
 dict_apl[250] = 2.55
@@ -120,6 +123,8 @@ dict_apl[1500] = 3.038
 dict_apl[2000] = 3.148
 dict_apl[3000] = 3.26
 x.plot_info(dict_apl)
+x.loglogplot("apl",dict_apl)
+
 
 
 # x = Erdos_Renyi_Graph(1/6,600)

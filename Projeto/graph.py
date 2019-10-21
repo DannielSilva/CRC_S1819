@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import queue
+import matplotlib.pyplot as plt
+from scipy.stats import linregress
 
 class Graph:
     numNodes = 0
@@ -33,6 +35,8 @@ class Graph:
         f.close()
 
     def addEdge(self, begin, end):
+        print("begin", type(begin))
+        print("end", type(end))
         if begin not in self.graph or (begin in self.graph and end not in self.graph[begin]):
             self.addEdge_aux(begin, end)
             self.numEdges +=1
@@ -181,13 +185,25 @@ class Graph:
             else:
                 info[degree] = 1
         info.update({degree: occurence / (len(self.graph)) for degree, occurence in info.items()})
-        self.plot_info(info)
+        #self.plot_info(info)
         return info
 
     def plot_info(self, info):
-        
-        plt.plot(list(info.keys()), list(info.values()), 'og')
+        x = sorted(list(info.keys()))
+        print(type(x))
+        y = [info[k] for k in x]
+        plt.plot(x, list(y), 'og')
         plt.show()
+    
+    def loglogplot(self,title, info, func):
+        x = list(info.keys())
+        y = list(info.values())
+        plt.loglog((x), (y), 'og')
+        if(func):
+            plt.loglog((x),func, 'ob')
+        plt.title(title)
+        plt.show()
+        print(linregress(np.log(x) ,np.log(y)))
 
 #x = Graph()
 # # x.addEdge(0,1)
