@@ -33,6 +33,8 @@ class Graph:
         f.close()
 
     def addEdge(self, begin, end):
+        print("begin", type(begin))
+        print("end", type(end))
         if begin not in self.graph or (begin in self.graph and end not in self.graph[begin]):
             self.addEdge_aux(begin, end)
             self.numEdges +=1
@@ -181,11 +183,15 @@ class Graph:
             else:
                 info[degree] = 1
         info.update({degree: occurence / (len(self.graph)) for degree, occurence in info.items()})
-        self.plot_info(info)
+        #self.plot_info(info)
         return info
 
     def plot_info(self, info):
-        plt.plot(list(info.keys()), list(info.values()), 'og')
+        x = sorted(list(info.keys()))
+        print(type(x))
+        print(x[0] < x[4])
+        y = [info[k] for k in x]
+        plt.plot(x, list(y), 'og')
         plt.show()
 
 #x = Graph()
@@ -194,7 +200,7 @@ class Graph:
 # # x.addEdge(0,2)
 #x.loadGraphFromFile("erdos.edges")
 # #print(x.lenCounts)
-# #x.plot_info(x.lenCounts)
+#x.plot_info({"250":0.12,"500":0.078,"750":0.057,"1000":0.054,"1250":0.038,"1500":0.04,"2000":0.035,"3000":0.025})
 # #print(x.adjencyList())
 # #print(x.degrees())
 # print("Number of edges : ",x.numEdges)
