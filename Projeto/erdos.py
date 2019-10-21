@@ -1,9 +1,10 @@
 import graph
 import random
 import matplotlib.pyplot as plt
-#from scipy.stats import binom, poisson
+from scipy.stats import binom, poisson
 from numpy import linspace, arange
 from math import log
+
 
 class Erdos_Renyi_Graph(graph.Graph):
 
@@ -28,83 +29,102 @@ class Erdos_Renyi_Graph(graph.Graph):
     def expected_avg_degree(self):
         return self.prob * (len(self.graph) - 1)
 
-    # def plot_dists(self):
-    #     degree_dist = self.degree_dist()
-    #     degrees = list(degree_dist.keys())
-    #     print("----", len(degrees))
-    #     print("----", len(degree_dist))
-    #     plt.scatter(degrees, list(degree_dist.values()), label=f'degree')
+    def plot_dists(self):
+        degree_dist = self.degree_dist()
+        degrees = list(degree_dist.keys())
+        print("----", len(degrees))
+        print("----", len(degree_dist))
+        plt.scatter(degrees, list(degree_dist.values()), label=f'degree')
 
-    #     x_binom = arange(
-    #         binom.ppf(0.01, self.numNodes - 1, self.prob),
-    #         binom.ppf(0.99, self.numNodes - 1, self.prob)
-    #     )
-    #     plt.plot(x_binom,
-    #                       binom.pmf(x_binom, self.numNodes - 1, self.prob), 'g',
-    #                       label=f'binomial')
+        x_binom = arange(
+            binom.ppf(0.01, self.numNodes - 1, self.prob),
+            binom.ppf(0.99, self.numNodes - 1, self.prob)
+        )
+        plt.plot(x_binom,
+                          binom.pmf(x_binom, self.numNodes - 1, self.prob), 'g',
+                          label=f'binomial')
         
-    #     poisson_average = (self.numNodes - 1) * self.prob
-    #     x_poisson = arange(
-    #         poisson.ppf(0.01, poisson_average),
-    #         poisson.ppf(0.99, poisson_average)
-    #     )
-    #     plt.plot(x_poisson, poisson.pmf(x_poisson, poisson_average), label=f'poisson')
-    #     #plt.legend(["Poisson", "Binomial", "Degree"], loc='best', fancybox = True, shadow = True)
-    #     plt.legend(loc='best', frameon=False)
-    #     plt.show()
+        poisson_average = (self.numNodes - 1) * self.prob
+        x_poisson = arange(
+            poisson.ppf(0.01, poisson_average),
+            poisson.ppf(0.99, poisson_average)
+        )
+        plt.plot(x_poisson, poisson.pmf(x_poisson, poisson_average), label=f'poisson')
+        #plt.legend(["Poisson", "Binomial", "Degree"], loc='best', fancybox = True, shadow = True)
+        plt.legend(loc='best', frameon=False)
+        plt.show()
         
-    #     # print(degree_dist)
-    #     # # Generate some data for this demonstration.
+        # print(degree_dist)
+        # # Generate some data for this demonstration.
 
-    #     # # Fit a normal distribution to the data:
-    #     # mu, std = norm.fit(list(degree_dist.values()))
+        # # Fit a normal distribution to the data:
+        # mu, std = norm.fit(list(degree_dist.values()))
 
-    #     # # Plot the histogram.
-    #     # plt.hist(list(degree_dist.values()), bins=25, density=True, alpha=0.6, color='g')
-    #     # #plt.plot(list(degree_dist.keys()), list(degree_dist.values()), 'og')
+        # # Plot the histogram.
+        # plt.hist(list(degree_dist.values()), bins=25, density=True, alpha=0.6, color='g')
+        # #plt.plot(list(degree_dist.keys()), list(degree_dist.values()), 'og')
 
-    #     # # Plot the PDF.
-    #     # xmin, xmax = plt.xlim()
-    #     # print("xmin/max", xmin, xmax)
-    #     # x = linspace(xmin, xmax, 100)
-    #     # p = norm.pdf(x, mu, std)
-    #     # plt.plot(x, p, 'k', linewidth=2)
-    #     # title = "Fit results: mu = %.2f,  std = %.2f" % (mu, std)
-    #     # plt.title(title)
+        # # Plot the PDF.
+        # xmin, xmax = plt.xlim()
+        # print("xmin/max", xmin, xmax)
+        # x = linspace(xmin, xmax, 100)
+        # p = norm.pdf(x, mu, std)
+        # plt.plot(x, p, 'k', linewidth=2)
+        # title = "Fit results: mu = %.2f,  std = %.2f" % (mu, std)
+        # plt.title(title)
 
-    #     # plt.show()
+        # plt.show()
 
-    #     #print(list(degree_dist.values()))
-    #     # mean, sigma = norm.fit(list(degree_dist.values()))
-    #     # print("mean, sigma:", mean, sigma)
-    #     # plt.plot(list(degree_dist.keys()), list(degree_dist.values()), 'og')
-    #     # plt.plot(list(degree_dist.keys()), norm.pdf(list(degree_dist.values()), mean, sigma))
-    #     # plt.show()
+        #print(list(degree_dist.values()))
+        # mean, sigma = norm.fit(list(degree_dist.values()))
+        # print("mean, sigma:", mean, sigma)
+        # plt.plot(list(degree_dist.keys()), list(degree_dist.values()), 'og')
+        # plt.plot(list(degree_dist.keys()), norm.pdf(list(degree_dist.values()), mean, sigma))
+        # plt.show()
     
     def small_world(self):
         return log(len(self.graph)) / log(self.averageDegree())
-#x = Erdos_Renyi_Graph(1/6, 500)
-#x.build()
-#x.saveGraphToFile("erdos.edges")
-#print(x.graph)
-#print(x.degrees())
-# print("<E> expected", x.avg_numEdges())
-# print("E real", x.numEdges)
-# print("<k> expected", x.expected_avg_degree())
-# print("<k> real", x.averageDegree())
-# print("Average Cluster: ", x.averageClust() )
-# print("Average path lenght: ", x.averagePathLength())
-# print("distance: ", x.distance)
-# print("small world: ", x.small_world())
-#print(list(x.graph))
-#x.degree_dist()
+x = Erdos_Renyi_Graph(1/6, 500)
+x.build()
+x.saveGraphToFile("erdos.edges")
+print(x.graph)
+print(x.degrees())
+print("<E> expected", x.avg_numEdges())
+print("E real", x.numEdges)
+print("<k> expected", x.expected_avg_degree())
+print("<k> real", x.averageDegree())
+print("Average Cluster: ", x.averageClust() )
+#print("Average path lenght: ", x.averagePathLength())
+print("distance: ", x.distance)
+print("small world: ", x.small_world())
+print(list(x.graph))
+x.degree_dist()
 
-#x.plot_dists()
+x.plot_dists()
+dict_clust = {}
+dict_clust[250] = 0.12
+dict_clust[500] = 0.078
+dict_clust[750] = 0.057
+dict_clust[1000] = 0.054
+dict_clust[1500] = 0.04
+dict_clust[2000] = 0.035
+dict_clust[3000] = 0.025
+x.plot_info(dict_clust)
+
+dict_apl = {}
+dict_apl[250] = 2.55
+dict_apl[500] = 2.77
+dict_apl[750] = 2.87
+dict_apl[1000] = 2.96
+dict_apl[1500] = 3.038
+dict_apl[2000] = 3.148
+dict_apl[3000] = 3.26
+x.plot_info(dict_apl)
 
 
-#x = Erdos_Renyi_Graph(1/6,600)
-#x.build()
-#x.saveGraphToFile("erdos.edges")
+# x = Erdos_Renyi_Graph(1/6,600)
+# x.build()
+# x.saveGraphToFile("erdos.edges")
 # print("Number of nodes : ",len(x.graph))
 # print("<E> expected", x.avg_numEdges())
 # print("E real", x.numEdges)
@@ -112,7 +132,7 @@ class Erdos_Renyi_Graph(graph.Graph):
 # print("<k> real", x.averageDegree())
 # print("Average degree: ", x.averageDegree())
 # print("Average Cluster: ", x.averageClust() )
-#print("Average path lenght: ", x.averagePathLength())
-#print("distance: ", x.distance)
-#print("small world: ", x.small_world())
-#x.plot_dists()
+# print("Average path lenght: ", x.averagePathLength())
+# print("distance: ", x.distance)
+# print("small world: ", x.small_world())
+# x.plot_dists()

@@ -185,6 +185,7 @@ class Graph:
         return info
 
     def plot_info(self, info):
+        
         plt.plot(list(info.keys()), list(info.values()), 'og')
         plt.show()
 
@@ -194,7 +195,6 @@ class Graph:
 # # x.addEdge(0,2)
 #x.loadGraphFromFile("erdos.edges")
 # #print(x.lenCounts)
-# #x.plot_info(x.lenCounts)
 # #print(x.adjencyList())
 # #print(x.degrees())
 # print("Number of edges : ",x.numEdges)

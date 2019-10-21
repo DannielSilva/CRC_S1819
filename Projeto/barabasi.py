@@ -52,7 +52,7 @@ class Barabasi_Albert_Graph(graph.Graph):
         return  2 * self.m
 
 
-x = Barabasi_Albert_Graph(10,5,1500)
+x = Barabasi_Albert_Graph(10,5,1250)
 x.build()
 x.saveGraphToFile("barabasi1500.edges")
 print("Nodes: ", len(x.graph))
