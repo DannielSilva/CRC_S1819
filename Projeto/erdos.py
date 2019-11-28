@@ -1,7 +1,7 @@
 import graph
 import random
 import matplotlib.pyplot as plt
-#from scipy.stats import binom, poisson
+from scipy.stats import binom, poisson
 from numpy import linspace, arange
 from math import log
 
@@ -83,18 +83,18 @@ class Erdos_Renyi_Graph(graph.Graph):
     
     # def small_world(self):
     #     return log(len(self.graph)) / log(self.averageDegree())
-# x = Erdos_Renyi_Graph(1/6, 100)
-# x.build()
-# #print(x.graph)
-# #print(x.degrees())
-# print(x.avg_numEdges())
-# print(x.numEdges)
-# print("<k> expected", x.expected_avg_degree())
-# print("<k> real", x.averageDegree())
-# print("Average path lenght: ", x.averagePathLength())
-# print("distance: ", x.distance)
-# print("small world: ", x.small_world())
-# #print(list(x.graph))
-# #x.saveGraphToFile("erdos.edges")
-# x.degree_dist()
-# x.plot_dists()
+x = Erdos_Renyi_Graph(1/6, 100)
+x.build()
+print(x.graph)
+print(x.degrees())
+print(x.avg_numEdges())
+print(x.numEdges)
+print("<k> expected", x.expected_avg_degree())
+print("<k> real", x.averageDegree())
+print("Average path lenght: ", x.averagePathLength())
+print("distance: ", x.distance)
+print("small world: ", x.small_world())
+print(list(x.graph))
+x.saveGraphToFile("erdos.edges")
+x.degree_dist()
+x.plot_dists()
