@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import queue
 import matplotlib.pyplot as plt
-from scipy.stats import linregress
 
 class Graph:
     numNodes = 0
@@ -35,8 +34,6 @@ class Graph:
         f.close()
 
     def addEdge(self, begin, end):
-        print("begin", type(begin))
-        print("end", type(end))
         if begin not in self.graph or (begin in self.graph and end not in self.graph[begin]):
             self.addEdge_aux(begin, end)
             self.numEdges +=1
@@ -102,6 +99,7 @@ class Graph:
                             
         return edges
 
+    #code adapted from https://eddmann.com/posts/depth-first-search-and-breadth-first-search-in-python/
     def bfs(self, begin, end):
         queue = [ (begin, [begin])]
         while queue:
@@ -110,44 +108,25 @@ class Graph:
             for nxt in here:
                 if nxt == end:
                     if len(path) > self.distance:
-                        print("len,distace",len(path), self.distance)
                         self.distance = len(path)
                     return path 
                 else:
                     queue.append((nxt, path + [nxt]))
         return []
 
-    # #Dont forget to check if length is != 0 in line "here" to make sure that averagePathLenght is correct
-    # def nodePathLength(self, begin):
-    #     sum = 0
-        
-    #     for node in self.graph:
-    #         ll = 0
-    #         key = str(node) + "-" + str(begin) 
-    #         if key in self.discovered:
-    #             sum += self.discovered[key]
-    #         elif node != begin:
-    #             ll += len(list(self.bfs(begin, node))) #here
-    #             sum += ll #here
-    #             index = str(begin) + "-" + str(node)
-    #             self.discovered[index] = ll #here
-    #             if(ll in self.lenCounts):
-    #                 self.lenCounts[ll] += 1
-    #             else:
-    #                 self.lenCounts[ll] = 1
-    #     return sum
-
     def nodePathLength(self, begin):
         sum = 0
-        vistos = {}
+        
         for node in self.graph:
             ll = 0
-            if (node,begin) in vistos:
-                sum += vistos[(begin,node)]
-            if node != begin:
+            key = str(node) + "-" + str(begin) 
+            if key in self.discovered:
+                sum += self.discovered[key]
+            elif node != begin:
                 ll += len(list(self.bfs(begin, node))) #here
                 sum += ll #here
-                vistos[(begin,node)] = ll #here
+                index = str(begin) + "-" + str(node)
+                self.discovered[index] = ll #here
                 if(ll in self.lenCounts):
                     self.lenCounts[ll] += 1
                 else:
@@ -184,48 +163,59 @@ class Graph:
                 info[degree] +=1
             else:
                 info[degree] = 1
-        info.update({degree: occurence / (len(self.graph)) for degree, occurence in info.items()})
+        print("degree", info)
+        #info.update({degree: occurence / (len(self.graph)) for degree, occurence in info.items()})
         #self.plot_info(info)
+        print("degreeeee", info)
         return info
 
     def plot_info(self, info):
         x = sorted(list(info.keys()))
-        print(type(x))
         y = [info[k] for k in x]
         plt.plot(x, list(y), 'og')
         plt.show()
     
-    def loglogplot(self,title, info, func):
-        x = list(info.keys())
-        y = list(info.values())
-        plt.loglog((x), (y), 'og')
-        if(func):
-            plt.loglog((x),func, 'ob')
-        plt.title(title)
-        plt.show()
-        print(linregress(np.log(x) ,np.log(y)))
+    # Code used to compute charts for barabasi analysis
+    # def loglogplot(self,title, info):
+    #     x = list(info.keys())
+    #     z = np.linspace(0,3500,100)
+    #     y = list(info.values())
+    #     if(title == "clust"):
+    #         func = np.power(np.log(z),2)/z
+    #         plt.loglog((z), 1/z, '^r', label=f'1/N')
+    #     if(title == "apl"):
+    #         func = np.log(z)/np.log(np.log(z))
+    #         plt.loglog((z), (np.log(z)), '^r',label=f'log(N)')
+    #     plt.loglog(z,func, 'ob',label=f'log(N) / log(log(N))' ) #label=f'log(N)^2 / N' OR label=f'log(N) / log(log(N))' )
+    #     plt.loglog((x), (y), 'og', label=f'apl')# OR label=f'clust')
+    #     plt.title(title)
+    #     plt.legend(loc='best', frameon=False)
+    #     plt.show()
 
-#x = Graph()
-# # x.addEdge(0,1)
-# # x.addEdge(2,3)
-# # x.addEdge(0,2)
-#x.loadGraphFromFile("erdos.edges")
-# #print(x.lenCounts)
-# #print(x.adjencyList())
-# #print(x.degrees())
-# print("Number of edges : ",x.numEdges)
-# print("Number of nodes : ",len(x.graph))
-#print("Average degree: ", x.averageDegree())
-# #print("Cluster of node 0: ", x.clusterringCoeff("0") )
-#print("Average Cluster: ", x.averageClust() )
-#print("Average path lenght: ", x.averagePathLength())
-# #print("Path from 1 to 8", list(x.bfs("0","8")))
-# #print("Average path lenght of node 11 ", x.nodePathLength("11"))
-# print("Average path lenght: ", x.averagePathLength())
-#print("distance: ", x.distance)
-# #x.draw()
-#x.degree_dist()
-# x.removeEdge(0,1)
-# x.removeEdge(0,2)
-# print(x.adjencyList())
-# print(x.degrees())
+
+#Code to build graph from barabasi and analize APL e clust coefficient
+# x = Graph()
+# x.loadGraphFromFile("barabasi500.edges")
+# x.plot_dists()
+# dict_clust = {}
+# dict_clust[250] = 0.12
+# dict_clust[500] = 0.078
+# dict_clust[750] = 0.057
+# dict_clust[1000] = 0.054
+# dict_clust[1500] = 0.04
+# dict_clust[2000] = 0.035
+# dict_clust[3000] = 0.025
+# x.plot_info(dict_clust)
+# x.loglogplot("clust",dict_clust)
+
+# dict_apl = {}
+# dict_apl[250] = 2.55
+# dict_apl[500] = 2.77
+# dict_apl[750] = 2.87
+# dict_apl[1000] = 2.96
+# dict_apl[1500] = 3.038
+# dict_apl[2000] = 3.148
+# dict_apl[3000] = 3.26
+# x.plot_info(dict_apl)
+# x.loglogplot("apl",dict_apl)
+
