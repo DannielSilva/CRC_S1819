@@ -17,9 +17,10 @@ class Lattice_Square(graph.Graph):
                 self.graph[id] = []
                 self.degree[id] = 0'''
         for id in range(chumbo):
-            if id%self.size != 9:
+            if id%self.size != self.size-1:
                 self.addEdge(id, id+1)
-            self.addEdge(id, id + self.size)
+            if id//self.size != self.size-1:
+                self.addEdge(id, id + self.size)
             #self.addEdge(id, id-1)
             #self.addEdge(id, id - self.size)
 
