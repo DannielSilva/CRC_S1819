@@ -11,16 +11,16 @@ class Cooperation_Simulation:
         print(self.payoff)
         #exit(0)
         self.network = net
-        self.strategy_of_node = self.alternateStrategy()
+        self.strategy_of_node = self.initStrategy()
         print(self.strategy_of_node)
        
         self.new_strategy_of_node = self.strategy_of_node
         self.scores = {node: 0 for node in self.network.graph.keys()}
         self.results = []
+        self.fitDelta = 0
 
     def reset_simulation(self):
-        self.scores = {node: 0 for node in self.network.graph.keys()}
-        self.strategy_of_node = self.alternateStrategy()
+        self.strategy_of_node = self.initStrategy()
         self.new_strategy_of_node = self.strategy_of_node
 
     def initStrategy(self):
@@ -38,11 +38,20 @@ class Cooperation_Simulation:
     def run(self, numGes, numSims):
         for s in range(numSims):
             self.reset_simulation()
-            self.computeFit()
             for g in range(numGes):
+                self.computeFit()
+                if self.fitDelta==0:
+                    print("Someone has taken over")
+                    exit(0)
+                numDs = self.iterateReplicatorFormulla(0.001)
+                if numDs == 0:
+                    print("C's has taken over")
+                    exit(0)
+                if numDs == len(self.network.graph):
+                    print("D's has taken over")
+                    exit(0)
                 print("s,g", s, g)
-                numDs, node = self.iterateReplicatorFormulla(10)
-                self.computeFitForNodeAndViz(node)
+                print("fitdelta", self.fitDelta)
             self.results.append(numDs / len(self.network.graph))
         plt.figure()
         plt.plot(list(range(len(self.results))),self.results)
@@ -53,13 +62,27 @@ class Cooperation_Simulation:
 
 
     def computeFit(self):
+        i = 0
+        fitMax = 0
+        fitMin = 0
         for node in self.scores:
-            self.scores[node] = self.computeFitNode(node)
+            fitScore = self.computeFitNode(node)
+            self.scores[node] = fitScore
+            if i == 0:
+                fitMax = fitScore
+                fitMin = fitScore
+                i+=1
+            if fitScore > fitMax:
+                fitMax = fitScore
+            if fitScore < fitMin:
+                fitMin = fitScore
+        self.fitDelta = fitMax - fitMin
+            
     
-    def computeFitForNodeAndViz(self, node):
-        self.scores[node] = self.computeFitNode(node)
-        for viz in self.network.graph[node]:
-            self.scores[viz] = self.computeFitNode(viz)
+    # def computeFitForNodeAndViz(self, node):
+    #     self.scores[node] = self.computeFitNode(node)
+    #     for viz in self.network.graph[node]:
+    #         self.scores[viz] = self.computeFitNode(viz)
 
 
     def computeFitNode(self, node):
@@ -102,17 +125,18 @@ class Cooperation_Simulation:
     def iterateReplicatorFormulla(self,beta):
         self.strategy_of_node = self.new_strategy_of_node
         print(sum( value == "D" for value in self.strategy_of_node.values()))
-        # for node in self.strategy_of_node:
-        #     self.iterateReplicatorFormullaNode(node,beta)
-        ''''''
-        node = random.choice(list(self.strategy_of_node.keys()))
-        self.iterateReplicatorFormullaNode(node,beta)
-        ''''''
+        for node in self.strategy_of_node:
+            self.iterateReplicatorFormullaNodeExponential(node,beta)
+            #self.iterateReplicatorFormullaNodeDelta(node,beta)
+        # ''''''
+        # node = random.choice(list(self.strategy_of_node.keys()))
+        # self.iterateReplicatorFormullaNode(node,beta)
+        # ''''''
         numDs = sum( value == "D" for value in self.strategy_of_node.values())
         #print(numDs)
-        return numDs, node
+        return numDs
 
-    def iterateReplicatorFormullaNode(self,node,beta):
+    def iterateReplicatorFormullaNodeExponential(self,node,beta):
         fitA = self.scores[node]
         # fitB = 0
         # for viz in self.network.graph[node]:
@@ -121,11 +145,36 @@ class Cooperation_Simulation:
         viz = random.choice(self.network.graph[node])
         fitB = self.scores[viz]
         prob = 1 / (1 + math.exp(-beta * (fitB - fitA)))
+        #prob = (fitB - fitA) / self.fitDelta
+        if prob < 0:
+            prob = 0
         toChoose = {}
         toChoose[self.strategy_of_node[node]] = 1-prob
-        inverse = [x for x in self.options if x != self.strategy_of_node[node]]
+        inverse = [self.strategy_of_node[viz]]
         inverse = inverse[0]
-        toChoose[self.strategy_of_node[node]]=1-prob
+        toChoose[inverse]=prob
+        strategy = random.choices(list(toChoose.keys()),weights = list(toChoose.values()), k = 1)
+        strategy = strategy[0]
+        self.new_strategy_of_node[node] = strategy
+        #print("\nPrevious strategy: ",self.strategy_of_node[node] )
+        #self.new_strategy_of_node[node] = self.strategy_of_node[toReplicate]
+
+    def iterateReplicatorFormullaNodeDelta(self,node,beta):
+        fitA = self.scores[node]
+        # fitB = 0
+        # for viz in self.network.graph[node]:
+        #     fitB += self.scores[viz]
+        # fitB = fitB / len(self.network.graph[node])
+        viz = random.choice(self.network.graph[node])
+        fitB = self.scores[viz]
+        #prob = 1 / (1 + math.exp(-beta * (fitB - fitA)))
+        prob = (fitB - fitA) / self.fitDelta
+        if prob < 0:
+            prob = 0
+        toChoose = {}
+        toChoose[self.strategy_of_node[node]] = 1-prob
+        inverse = [self.strategy_of_node[viz]]
+        inverse = inverse[0]
         toChoose[inverse]=prob
         strategy = random.choices(list(toChoose.keys()),weights = list(toChoose.values()), k = 1)
         strategy = strategy[0]
@@ -137,14 +186,14 @@ class Cooperation_Simulation:
 
 
 x = graph.Graph()
-x.loadGraphFromFile("../graphs/complete.edges")
+x.loadGraphFromFile("../graphs/barabasi1250.edges")
 
-y = Cooperation_Simulation(x,1,0)
+y = Cooperation_Simulation(x,2,-1)
 #print(y.scores)
 #y.computeFit()
 #print(y.scores)
 #y.iterateGreedNeig()
-res = y.run(10000,3)
+res = y.run(10000000,1)
 print("res",res)
 #beta = 0.1
 #print(y.iterateReplicatorFormulla(10))
