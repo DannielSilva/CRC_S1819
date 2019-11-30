@@ -75,8 +75,10 @@ class Barabasi_Albert_Graph(graph.Graph):
         plt.show()
         plt.clf()
 
-x = Barabasi_Albert_Graph(2,2,1000)
-x.build()
+#x = Barabasi_Albert_Graph(2,2,1000)
+x = graph.Graph()
+#x.build()
+x.loadGraphFromFile("../code/model.edgelist")
 degrees = x.degree_dist()
 x.plot_info(degrees)
 x.loglogplot(degrees)

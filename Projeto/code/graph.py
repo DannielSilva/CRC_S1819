@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import queue
 import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
 
 class Graph:
     numNodes = 0
@@ -175,6 +176,38 @@ class Graph:
         plt.plot(x, list(y), 'og')
         plt.show()
     
+    def loglogplot(self, info):
+        x = sorted(list(info.keys()))
+        y = [info[k] for k in x]
+        xlog = np.log(x)
+        ylog = np.log(y)
+        ax = plt.gca()
+        plt.scatter(xlog, ylog, linewidth=2.5, color='navy')
+        
+        print(np.array(x).shape)
+        print(np.array(x))
+        print(-3*np.array(x))
+        #plt.plot(xlog, -3*np.array(xlog))
+
+        linear_regressor = LinearRegression()  # create object for the class
+        linear_regressor.fit(xlog.reshape((-1, 1)), ylog)  # perform linear regression
+        Y_pred = linear_regressor.predict(xlog.reshape((-1, 1)))
+        plt.plot(xlog, Y_pred, color='red')
+        print('slope:', linear_regressor.coef_)
+
+        plt.xlabel(r'log(x)')
+        plt.ylabel(r'log(y)')
+        ax.grid(True)
+        plt.title(r'Log-Log plot')
+        plt.show()
+        plt.clf()
+
+# x = Graph()
+# #x.build()
+# x.loadGraphFromFile("../code/model.edgelist")
+# degrees = x.degree_dist()
+# x.plot_info(degrees)
+# x.loglogplot(degrees)
     # Code used to compute charts for barabasi analysis
     # def loglogplot(self,title, info):
     #     x = list(info.keys())
