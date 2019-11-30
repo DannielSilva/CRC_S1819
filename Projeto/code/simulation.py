@@ -11,14 +11,16 @@ class Cooperation_Simulation:
         print(self.payoff)
         #exit(0)
         self.network = net
-        self.strategy_of_node = self.initStrategy()
+        self.strategy_of_node = self.alternateStrategy()
+        print(self.strategy_of_node)
+       
         self.new_strategy_of_node = self.strategy_of_node
         self.scores = {node: 0 for node in self.network.graph.keys()}
         self.results = []
 
     def reset_simulation(self):
         self.scores = {node: 0 for node in self.network.graph.keys()}
-        self.strategy_of_node = self.initStrategy()
+        self.strategy_of_node = self.alternateStrategy()
         self.new_strategy_of_node = self.strategy_of_node
 
     def initStrategy(self):
@@ -36,10 +38,11 @@ class Cooperation_Simulation:
     def run(self, numGes, numSims):
         for s in range(numSims):
             self.reset_simulation()
+            self.computeFit()
             for g in range(numGes):
                 print("s,g", s, g)
-                self.computeFit()
-                numDs = self.iterateReplicatorFormulla(10)
+                numDs, node = self.iterateReplicatorFormulla(10)
+                self.computeFitForNodeAndViz(node)
             self.results.append(numDs / len(self.network.graph))
         plt.figure()
         plt.plot(list(range(len(self.results))),self.results)
@@ -52,7 +55,12 @@ class Cooperation_Simulation:
     def computeFit(self):
         for node in self.scores:
             self.scores[node] = self.computeFitNode(node)
-        
+    
+    def computeFitForNodeAndViz(self, node):
+        self.scores[node] = self.computeFitNode(node)
+        for viz in self.network.graph[node]:
+            self.scores[viz] = self.computeFitNode(viz)
+
 
     def computeFitNode(self, node):
         score = 0
@@ -94,11 +102,15 @@ class Cooperation_Simulation:
     def iterateReplicatorFormulla(self,beta):
         self.strategy_of_node = self.new_strategy_of_node
         print(sum( value == "D" for value in self.strategy_of_node.values()))
-        for node in self.strategy_of_node:
-            self.iterateReplicatorFormullaNode(node,beta)
+        # for node in self.strategy_of_node:
+        #     self.iterateReplicatorFormullaNode(node,beta)
+        ''''''
+        node = random.choice(list(self.strategy_of_node.keys()))
+        self.iterateReplicatorFormullaNode(node,beta)
+        ''''''
         numDs = sum( value == "D" for value in self.strategy_of_node.values())
         #print(numDs)
-        return numDs
+        return numDs, node
 
     def iterateReplicatorFormullaNode(self,node,beta):
         fitA = self.scores[node]
@@ -125,14 +137,14 @@ class Cooperation_Simulation:
 
 
 x = graph.Graph()
-x.loadGraphFromFile("../code/model.edgelist")
+x.loadGraphFromFile("../graphs/complete.edges")
 
 y = Cooperation_Simulation(x,1,0)
 #print(y.scores)
 #y.computeFit()
 #print(y.scores)
 #y.iterateGreedNeig()
-res = y.run(100,100)
+res = y.run(10000,3)
 print("res",res)
 #beta = 0.1
 #print(y.iterateReplicatorFormulla(10))

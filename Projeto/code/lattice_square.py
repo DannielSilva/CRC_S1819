@@ -24,6 +24,6 @@ class Lattice_Square(graph.Graph):
             #self.addEdge(id, id-1)
             #self.addEdge(id, id - self.size)
 
-x = Lattice_Square(10)
+x = Lattice_Square(100)
 x.build()
 x.saveGraphToFile("lattice.edges")
