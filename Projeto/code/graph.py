@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import queue
 import matplotlib.pyplot as plt
-from sklearn.linear_model import LinearRegression
+#from sklearn.linear_model import LinearRegression
 
 class Graph:
     numNodes = 0
@@ -201,13 +201,28 @@ class Graph:
         plt.title(r'Log-Log plot')
         plt.show()
         plt.clf()
+    
+    def heterogenity(self):
+        info = self.degree_dist()
+        first = 0
+        second = 0
+        for degree, Ndegree in info.items():
+            first += (degree ** 2) * Ndegree
+            second += degree * Ndegree
+        first = first / len(self.graph)
+        second = second / len(self.graph)
+        second = second ** 2
+        return first - second
 
-# x = Graph()
-# #x.build()
-# x.loadGraphFromFile("../code/model.edgelist")
-# degrees = x.degree_dist()
-# x.plot_info(degrees)
-# x.loglogplot(degrees)
+
+
+x = Graph()
+#x.build()
+x.loadGraphFromFile("../graphs/lattice.edges")
+print("hete: ",x.heterogenity())
+degrees = x.degree_dist()
+x.plot_info(degrees)
+#x.loglogplot(degrees)
     # Code used to compute charts for barabasi analysis
     # def loglogplot(self,title, info):
     #     x = list(info.keys())
