@@ -11,7 +11,7 @@ class Cooperation_Simulation:
         print(self.payoff)
         #exit(0)
         self.network = net
-        self.strategy_of_node = self.alternateStrategy()
+        self.strategy_of_node = self.selectTopHubs(0.05)
         print(self.strategy_of_node)
        
         self.new_strategy_of_node = self.strategy_of_node
@@ -20,15 +20,25 @@ class Cooperation_Simulation:
         self.fitDelta = 0
 
     def reset_simulation(self):
-        self.strategy_of_node = self.alternateStrategy()
+        self.strategy_of_node = self.selectTopHubs(0.05)
         self.new_strategy_of_node = self.strategy_of_node
 
-    def initStrategy(self):
+    def randomStrategy(self):
         Cs = random.sample(population=list(self.network.graph.keys()),k=len(list(self.network.graph.keys()))//2,)
         # print(list(self.network.graph.keys()))
         # exit(0)
         return {node: "C" if node in Cs else "D" for node in self.network.graph.keys()}
     
+    def selectTopHubs(self, fraction, niceHubs=True):
+        d = self.network.degree
+        top = round(len(self.network.graph) * fraction)
+        hubs = sorted(d, key=d.get)[-top:]
+        print("hubs",hubs)
+        print("lenhubs",len(hubs))
+        # exit(0)
+        #['3', '10', '19', '9', '6', '5', '11', '8', '1', '0', '2', '7', '4']
+        return {node: "C" if niceHubs and node in hubs else "D" for node in self.network.graph.keys()}
+
     def alternateStrategy(self):
         return {node: "C" if int(node)%2 == 0 else "D" for node in self.network.graph.keys()}
 
@@ -51,13 +61,9 @@ class Cooperation_Simulation:
                     break
                 if numDs == len(self.network.graph):
                     print("D's has taken over")
-                    break
-                print("fitdelta", self.fitDelta)
+                    exit(0)
                 print("s,g", s, g)
-            plt.figure()
-            plt.plot(grow)
-            plt.show()
-
+                #print("fitdelta", self.fitDelta)
             self.results.append(numDs / len(self.network.graph))
         plt.figure()
         plt.plot(list(range(len(self.results))),self.results)
