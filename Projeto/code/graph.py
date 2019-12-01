@@ -216,16 +216,16 @@ class Graph:
 
 
 
-x = Graph()
-#x.build()
-x.loadGraphFromFile("../graphs/barabasi250.edges")
-print("hete: ",x.heterogenity())
-degrees = x.degree_dist()
-#x.plot_info(degrees)
-d=x.degree
-print("\n")
-print(sorted(d, key=d.get))
-print(sorted(d, key=d.get)[-round(len(x.graph) * 0.05):])
+# x = Graph()
+# #x.build()
+# x.loadGraphFromFile("../graphs/barabasi250.edges")
+# print("hete: ",x.heterogenity())
+# degrees = x.degree_dist()
+# #x.plot_info(degrees)
+# d=x.degree
+# print("\n")
+# print(sorted(d, key=d.get))
+# print(sorted(d, key=d.get)[-round(len(x.graph) * 0.05):])
 #x.loglogplot(degrees)
     # Code used to compute charts for barabasi analysis
     # def loglogplot(self,title, info):

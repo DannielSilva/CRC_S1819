@@ -47,16 +47,18 @@ class Cooperation_Simulation:
 
     def run(self, numGes, numSims):
         for s in range(numSims):
+            grow = []
             self.reset_simulation()
             for g in range(numGes):
                 self.computeFit()
                 if self.fitDelta==0:
                     print("Someone has taken over")
-                    exit(0)
+                    break
                 numDs = self.iterateReplicatorFormulla(0.001)
+                grow.append(numDs)
                 if numDs == 0:
                     print("C's has taken over")
-                    exit(0)
+                    break
                 if numDs == len(self.network.graph):
                     print("D's has taken over")
                     exit(0)
@@ -66,6 +68,7 @@ class Cooperation_Simulation:
         plt.figure()
         plt.plot(list(range(len(self.results))),self.results)
         plt.show()
+
         return sum(self.results) / len(self.results)
 
             
@@ -196,15 +199,20 @@ class Cooperation_Simulation:
 
 
 x = graph.Graph()
-x.loadGraphFromFile("../graphs/barabasi3000.edges")
+string = "complete.edges"
+x.loadGraphFromFile("../graphs/" + string)
 
-y = Cooperation_Simulation(x,1,0)
+y = Cooperation_Simulation(x,2,-1)
 #print(y.scores)
 #y.computeFit()
 #print(y.scores)
 #y.iterateGreedNeig()
-# print(y.selectTopHubs(0.05))
-res = y.run(10000000,1)
+name = "../reports/"+string + ".txt"
+report = string + " heteroginity: " + str(x.heterogenity())
+f = open(name, "w")
+f.write(report)
+f.close()
+res = y.run(10000000,5)
 print("res",res)
 #beta = 0.1
 #print(y.iterateReplicatorFormulla(10))

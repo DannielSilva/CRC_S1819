@@ -1,7 +1,7 @@
 import graph
 import random
 import matplotlib.pyplot as plt
-from scipy.stats import binom, poisson
+#from scipy.stats import binom, poisson
 from numpy import linspace, arange
 import numpy as np
 from math import log
@@ -55,6 +55,6 @@ class Erdos_Renyi_Graph(graph.Graph):
         return log(len(self.graph)) / log(self.averageDegree())
 
     
-x = Erdos_Renyi_Graph(1, 50)
+x = Erdos_Renyi_Graph(1, 200)
 x.build()
 x.saveGraphToFile("../graphs/complete.edges")
