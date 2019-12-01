@@ -11,7 +11,7 @@ class Cooperation_Simulation:
         print(self.payoff)
         #exit(0)
         self.network = net
-        self.strategy_of_node = self.initStrategy()
+        self.strategy_of_node = self.alternateStrategy()
         print(self.strategy_of_node)
        
         self.new_strategy_of_node = self.strategy_of_node
@@ -20,7 +20,7 @@ class Cooperation_Simulation:
         self.fitDelta = 0
 
     def reset_simulation(self):
-        self.strategy_of_node = self.initStrategy()
+        self.strategy_of_node = self.alternateStrategy()
         self.new_strategy_of_node = self.strategy_of_node
 
     def initStrategy(self):
@@ -37,25 +37,32 @@ class Cooperation_Simulation:
 
     def run(self, numGes, numSims):
         for s in range(numSims):
+            grow = []
             self.reset_simulation()
             for g in range(numGes):
                 self.computeFit()
                 if self.fitDelta==0:
                     print("Someone has taken over")
-                    exit(0)
+                    break
                 numDs = self.iterateReplicatorFormulla(0.001)
+                grow.append(numDs)
                 if numDs == 0:
                     print("C's has taken over")
-                    exit(0)
+                    break
                 if numDs == len(self.network.graph):
                     print("D's has taken over")
-                    exit(0)
-                print("s,g", s, g)
+                    break
                 print("fitdelta", self.fitDelta)
+                print("s,g", s, g)
+            plt.figure()
+            plt.plot(grow)
+            plt.show()
+
             self.results.append(numDs / len(self.network.graph))
         plt.figure()
         plt.plot(list(range(len(self.results))),self.results)
         plt.show()
+
         return sum(self.results) / len(self.results)
 
             
@@ -186,14 +193,14 @@ class Cooperation_Simulation:
 
 
 x = graph.Graph()
-x.loadGraphFromFile("../graphs/barabasi1250.edges")
+x.loadGraphFromFile("../graphs/barabasi3000.edges")
 
-y = Cooperation_Simulation(x,2,-1)
+y = Cooperation_Simulation(x,1,0)
 #print(y.scores)
 #y.computeFit()
 #print(y.scores)
 #y.iterateGreedNeig()
-res = y.run(10000000,1)
+res = y.run(10000000,5)
 print("res",res)
 #beta = 0.1
 #print(y.iterateReplicatorFormulla(10))
