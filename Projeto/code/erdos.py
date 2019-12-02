@@ -55,6 +55,6 @@ class Erdos_Renyi_Graph(graph.Graph):
         return log(len(self.graph)) / log(self.averageDegree())
 
     
-x = Erdos_Renyi_Graph(1, 200)
-x.build()
-x.saveGraphToFile("../graphs/complete.edges")
+#x = Erdos_Renyi_Graph(1, 200)
+#x.build()
+#x.saveGraphToFile("../graphs/complete.edges")

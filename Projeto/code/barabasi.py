@@ -13,7 +13,6 @@ class Barabasi_Albert_Graph(graph.Graph):
         self.initNodes = initNodes
         mm = erdos.Erdos_Renyi_Graph(1,initNodes)
         mm.build()
-        print(mm.graph)
         self.graph = mm.graph
 
     def build(self):
@@ -75,11 +74,12 @@ class Barabasi_Albert_Graph(graph.Graph):
         plt.show()
         plt.clf()
 
-#x = Barabasi_Albert_Graph(2,2,1000)
-x = graph.Graph()
-#x.build()
-x.loadGraphFromFile("../code/model.edgelist")
-degrees = x.degree_dist()
-x.plot_info(degrees)
-x.loglogplot(degrees)
+nodes = 1500
+x = Barabasi_Albert_Graph(2,2,nodes)
+x.build()
+string = "../graphs/baraba_" + str(nodes)+ ".edges"
+x.saveGraphToFile(string)
+#degrees = x.degree_dist()
+#x.plot_info(degrees)
+#x.loglogplot(degrees)
 #x.loglogplot(degrees)
