@@ -11,7 +11,7 @@ class Cooperation_Simulation:
         print(self.payoff)
         #exit(0)
         self.network = net
-        self.strategy_of_node = self.selectTopHubs(0.05)
+        self.strategy_of_node = self.randomStrategy()
         print(self.strategy_of_node)
        
         self.new_strategy_of_node = self.strategy_of_node
@@ -20,7 +20,7 @@ class Cooperation_Simulation:
         self.fitDelta = 0
 
     def reset_simulation(self):
-        self.strategy_of_node = self.selectTopHubs(0.05)
+        self.strategy_of_node = self.randomStrategy()
         self.new_strategy_of_node = self.strategy_of_node
 
     def randomStrategy(self):
@@ -46,6 +46,7 @@ class Cooperation_Simulation:
         return {node: "C" if int(node) < len(self.network.graph) //2 else "D" for node in self.network.graph.keys()}
 
     def run(self, numGes, numSims):
+        iters = []
         for s in range(numSims):
             grow = []
             self.reset_simulation()
@@ -54,21 +55,23 @@ class Cooperation_Simulation:
                 if self.fitDelta==0:
                     print("Someone has taken over")
                     break
-                numDs = self.iterateReplicatorFormulla(0.001)
-                grow.append(numDs)
+                numDs = self.iterateReplicatorFormulla(2)
+                grow.append(numDs/ len(self.network.graph))
                 if numDs == 0:
                     print("C's has taken over")
                     break
                 if numDs == len(self.network.graph):
                     print("D's has taken over")
-                    exit(0)
-                print("s,g", s, g)
+                    break
+                print("s,g, numDs", s, g, numDs)
                 #print("fitdelta", self.fitDelta)
             self.results.append(numDs / len(self.network.graph))
+            iters.append(g)
+            plt.plot(grow)
         plt.figure()
         plt.plot(list(range(len(self.results))),self.results)
         plt.show()
-
+        print("iters", iters)
         return sum(self.results) / len(self.results)
 
             
@@ -137,7 +140,7 @@ class Cooperation_Simulation:
 
     def iterateReplicatorFormulla(self,beta):
         self.strategy_of_node = self.new_strategy_of_node
-        print(sum( value == "D" for value in self.strategy_of_node.values()))
+        #print(sum( value == "D" for value in self.strategy_of_node.values()))
         for node in self.strategy_of_node:
             self.iterateReplicatorFormullaNodeExponential(node,beta)
             #self.iterateReplicatorFormullaNodeDelta(node,beta)
@@ -199,21 +202,25 @@ class Cooperation_Simulation:
 
 
 x = graph.Graph()
-string = "complete.edges"
+string = "barabasi3000.edges"
 x.loadGraphFromFile("../graphs/" + string)
-
-y = Cooperation_Simulation(x,2,-1)
+T=1
+S=0
+y = Cooperation_Simulation(x,T,S)
 #print(y.scores)
 #y.computeFit()
 #print(y.scores)
 #y.iterateGreedNeig()
-name = "../reports/"+string + ".txt"
-report = string + " heteroginity: " + str(x.heterogenity())
+sims = 5
+res = y.run(1000,sims)
+print("res",res)
+
+
+name = "../reports/"+string +"sims"+str(sims)+"T" + str(T) + "S" + str(S) + ".txt"
+report = string + " heteroginity: " + str(x.heterogenity()) + "fractionDef:" + str(res)
 f = open(name, "w")
 f.write(report)
 f.close()
-res = y.run(10000000,5)
-print("res",res)
 #beta = 0.1
 #print(y.iterateReplicatorFormulla(10))
 #print(sum( value == "D" for value in y.strategy_of_node.values()))
