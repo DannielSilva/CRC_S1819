@@ -1,0 +1,1 @@
+barabasi1500.edges heteroginity: 2205.1542857142863fractionDef:1.0
