@@ -59,10 +59,10 @@ class Cooperation_Simulation:
                 frac = numCs / len(self.network.graph)
                 grow.append(frac)
                 if numCs == 0:
-                    print("C's has taken over")
+                    print("D's has taken over")
                     break
                 if numCs == len(self.network.graph):
-                    print("D's has taken over")
+                    print("C's has taken over")
                     break
                 print("s,g", s, g)
 
@@ -203,10 +203,10 @@ class Cooperation_Simulation:
 
 
 x = graph.Graph()
-string = "barabasi3000.edges"
+string = "complete.edges"
 x.loadGraphFromFile("../graphs/" + string)
 T=1
-S=0
+S = 0
 y = Cooperation_Simulation(x,T,S)
 #print(y.scores)
 #y.computeFit()
