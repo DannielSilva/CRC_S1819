@@ -73,7 +73,6 @@ class Cooperation_Simulation:
         plt.figure()
         plt.plot(list(range(len(self.results))),self.results)
         plt.show()
-        print("iters", iters)
         return sum(self.results) / len(self.results)
 
             
