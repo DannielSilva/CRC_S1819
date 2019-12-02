@@ -1,0 +1,1 @@
+regularN1000Z4het0.edges heteroginity: 0.0fractionCoop:0.0

@@ -1,0 +1,1 @@
+complete.edges heteroginity: 0.0fractionCoop:0.0
