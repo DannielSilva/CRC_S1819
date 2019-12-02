@@ -74,7 +74,7 @@ class Barabasi_Albert_Graph(graph.Graph):
         plt.show()
         plt.clf()
 
-nodes = 1500
+nodes = 2000
 x = Barabasi_Albert_Graph(2,2,nodes)
 x.build()
 string = "../graphs/baraba_" + str(nodes)+ ".edges"
