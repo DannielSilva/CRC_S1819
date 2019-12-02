@@ -11,7 +11,7 @@ class Cooperation_Simulation:
         print(self.payoff)
         #exit(0)
         self.network = net
-        self.strategy_of_node = self.selectTopHubs(0.05)
+        self.strategy_of_node = self.staticStrategy()
         print(self.strategy_of_node)
        
         self.new_strategy_of_node = self.strategy_of_node
@@ -20,7 +20,7 @@ class Cooperation_Simulation:
         self.fitDelta = 0
 
     def reset_simulation(self):
-        self.strategy_of_node = self.selectTopHubs(0.05)
+        self.strategy_of_node = self.staticStrategy()
         self.new_strategy_of_node = self.strategy_of_node
 
     def randomStrategy(self):
@@ -46,6 +46,7 @@ class Cooperation_Simulation:
         return {node: "C" if int(node) < len(self.network.graph) //2 else "D" for node in self.network.graph.keys()}
 
     def run(self, numGes, numSims):
+        plt.figure()
         for s in range(numSims):
             grow = []
             self.reset_simulation()
@@ -54,17 +55,21 @@ class Cooperation_Simulation:
                 if self.fitDelta==0:
                     print("Someone has taken over")
                     break
-                numDs = self.iterateReplicatorFormulla(0.001)
-                grow.append(numDs)
-                if numDs == 0:
+                numCs = self.iterateReplicatorFormulla(0.1)
+                frac = numCs / len(self.network.graph)
+                grow.append(frac)
+                if numCs == 0:
                     print("C's has taken over")
                     break
-                if numDs == len(self.network.graph):
+                if numCs == len(self.network.graph):
                     print("D's has taken over")
-                    exit(0)
+                    break
                 print("s,g", s, g)
+
                 #print("fitdelta", self.fitDelta)
-            self.results.append(numDs / len(self.network.graph))
+            self.results.append(numCs / len(self.network.graph))
+            plt.plot(grow)
+        plt.show()
         plt.figure()
         plt.plot(list(range(len(self.results))),self.results)
         plt.show()
@@ -145,9 +150,9 @@ class Cooperation_Simulation:
         # node = random.choice(list(self.strategy_of_node.keys()))
         # self.iterateReplicatorFormullaNode(node,beta)
         # ''''''
-        numDs = sum( value == "D" for value in self.strategy_of_node.values())
+        numCs = sum( value == "C" for value in self.strategy_of_node.values())
         #print(numDs)
-        return numDs
+        return numCs
 
     def iterateReplicatorFormullaNodeExponential(self,node,beta):
         fitA = self.scores[node]
@@ -202,18 +207,18 @@ x = graph.Graph()
 string = "complete.edges"
 x.loadGraphFromFile("../graphs/" + string)
 
-y = Cooperation_Simulation(x,2,-1)
+y = Cooperation_Simulation(x,1,0)
 #print(y.scores)
 #y.computeFit()
 #print(y.scores)
 #y.iterateGreedNeig()
 name = "../reports/"+string + ".txt"
-report = string + " heteroginity: " + str(x.heterogenity())
+res = y.run(10000,3)
+print("res",res)
+report = string + " heteroginity: " + str(x.heterogenity()) + "  ,   fractionDef = " + str(res)
 f = open(name, "w")
 f.write(report)
 f.close()
-res = y.run(10000000,5)
-print("res",res)
 #beta = 0.1
 #print(y.iterateReplicatorFormulla(10))
 #print(sum( value == "D" for value in y.strategy_of_node.values()))
