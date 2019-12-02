@@ -11,7 +11,7 @@ class Cooperation_Simulation:
         print(self.payoff)
         #exit(0)
         self.network = net
-        self.strategy_of_node = self.randomStrategy()
+        self.strategy_of_node = self.selectTopHubs(0.2)
         print(self.strategy_of_node)
        
         self.new_strategy_of_node = self.strategy_of_node
@@ -20,7 +20,7 @@ class Cooperation_Simulation:
         self.fitDelta = 0
 
     def reset_simulation(self):
-        self.strategy_of_node = self.randomStrategy()
+        self.strategy_of_node = self.selectTopHubs(0.2)
         self.new_strategy_of_node = self.strategy_of_node
 
     def randomStrategy(self):
@@ -55,16 +55,16 @@ class Cooperation_Simulation:
                 if self.fitDelta==0:
                     print("Someone has taken over")
                     break
-                numCs = self.iterateReplicatorFormulla(0.1)
+                numCs = self.iterateReplicatorFormulla(2)
                 frac = numCs / len(self.network.graph)
                 grow.append(frac)
                 if numCs == 0:
-                    print("C's has taken over")
-                    break
-                if numCs == len(self.network.graph):
                     print("D's has taken over")
                     break
-                print("s,g", s, g)
+                if numCs == len(self.network.graph):
+                    print("C's has taken over")
+                    break
+                print("s,g", s, g, numCs)
 
                 #print("fitdelta", self.fitDelta)
             self.results.append(numCs / len(self.network.graph))
@@ -72,9 +72,9 @@ class Cooperation_Simulation:
         plt.title("Regular graph")
         plt.xlabel("Number of Generations")
         plt.ylabel("Fraction of Cooperators")
-        plt.show()
-        plt.figure()
-        plt.plot(list(range(len(self.results))),self.results)
+        #plt.show()
+        # plt.figure()
+        # plt.plot(list(range(len(self.results))),self.results)
         #plt.show()
         return sum(self.results) / len(self.results)
 
@@ -206,23 +206,25 @@ class Cooperation_Simulation:
 
 
 x = graph.Graph()
-string = "regularN1000Z4het0.edges"
+string = "baraba_1000.edges"
 x.loadGraphFromFile("../graphs/" + string)
-T=2
-S=0
+S = 0
+T = 2.2
+
 y = Cooperation_Simulation(x,T,S)
 #print(y.scores)
 #y.computeFit()
 #print(y.scores)
 #y.iterateGreedNeig()
-sims = 20
-res = y.run(1000,sims)
+sims = 10
+res = y.run(10000,sims)
 print("res",res)
 
 
-name = "../reports/"+string +"sims"+str(sims)+"T" + str(T) + "S" + str(S) + ".txt"
-report = string + " heteroginity: " + str(x.heterogenity()) + "fractionDef:" + str(res)
-f = open(name, "w")
+name = "../reports/barabasi/topHubs/"+string +"sims"+str(sims)+"T" + str(T) + "S" + str(S) + "quantil:" + str(0.2)
+report = string + " heteroginity: " + str(x.heterogenity()) + "fractionCoop:" + str(res)
+plt.savefig(name + ".png")
+f = open(name  + ".txt", "w")
 f.write(report)
 f.close()
 #beta = 0.1
