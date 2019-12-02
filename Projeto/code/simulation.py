@@ -69,10 +69,13 @@ class Cooperation_Simulation:
                 #print("fitdelta", self.fitDelta)
             self.results.append(numCs / len(self.network.graph))
             plt.plot(grow)
+        plt.title("Regular graph")
+        plt.xlabel("Number of Generations")
+        plt.ylabel("Fraction of Cooperators")
         plt.show()
         plt.figure()
         plt.plot(list(range(len(self.results))),self.results)
-        plt.show()
+        #plt.show()
         return sum(self.results) / len(self.results)
 
             
@@ -212,7 +215,7 @@ y = Cooperation_Simulation(x,T,S)
 #y.computeFit()
 #print(y.scores)
 #y.iterateGreedNeig()
-sims = 5
+sims = 20
 res = y.run(1000,sims)
 print("res",res)
 
