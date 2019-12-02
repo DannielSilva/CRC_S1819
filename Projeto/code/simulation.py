@@ -11,7 +11,7 @@ class Cooperation_Simulation:
         print(self.payoff)
         #exit(0)
         self.network = net
-        self.strategy_of_node = self.staticStrategy()
+        self.strategy_of_node = self.randomStrategy()
         print(self.strategy_of_node)
        
         self.new_strategy_of_node = self.strategy_of_node
@@ -20,7 +20,7 @@ class Cooperation_Simulation:
         self.fitDelta = 0
 
     def reset_simulation(self):
-        self.strategy_of_node = self.staticStrategy()
+        self.strategy_of_node = self.randomStrategy()
         self.new_strategy_of_node = self.strategy_of_node
 
     def randomStrategy(self):
@@ -73,7 +73,7 @@ class Cooperation_Simulation:
         plt.figure()
         plt.plot(list(range(len(self.results))),self.results)
         plt.show()
-
+        print("iters", iters)
         return sum(self.results) / len(self.results)
 
             
@@ -142,7 +142,7 @@ class Cooperation_Simulation:
 
     def iterateReplicatorFormulla(self,beta):
         self.strategy_of_node = self.new_strategy_of_node
-        print(sum( value == "D" for value in self.strategy_of_node.values()))
+        #print(sum( value == "D" for value in self.strategy_of_node.values()))
         for node in self.strategy_of_node:
             self.iterateReplicatorFormullaNodeExponential(node,beta)
             #self.iterateReplicatorFormullaNodeDelta(node,beta)
@@ -204,18 +204,22 @@ class Cooperation_Simulation:
 
 
 x = graph.Graph()
-string = "complete.edges"
+string = "barabasi3000.edges"
 x.loadGraphFromFile("../graphs/" + string)
-
-y = Cooperation_Simulation(x,1,0)
+T=1
+S=0
+y = Cooperation_Simulation(x,T,S)
 #print(y.scores)
 #y.computeFit()
 #print(y.scores)
 #y.iterateGreedNeig()
-name = "../reports/"+string + ".txt"
-res = y.run(10000,3)
+sims = 5
+res = y.run(1000,sims)
 print("res",res)
-report = string + " heteroginity: " + str(x.heterogenity()) + "  ,   fractionDef = " + str(res)
+
+
+name = "../reports/"+string +"sims"+str(sims)+"T" + str(T) + "S" + str(S) + ".txt"
+report = string + " heteroginity: " + str(x.heterogenity()) + "fractionDef:" + str(res)
 f = open(name, "w")
 f.write(report)
 f.close()
