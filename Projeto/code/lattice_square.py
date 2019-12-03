@@ -17,13 +17,22 @@ class Lattice_Square(graph.Graph):
                 self.graph[id] = []
                 self.degree[id] = 0'''
         for id in range(chumbo):
-            if id%self.size != self.size-1:
+            first = (id % self.size)
+            second = ((id+1) % self.size)
+            if second > first:
                 self.addEdge(id, id+1)
-            if id//self.size != self.size-1:
-                self.addEdge(id, id + self.size)
+            if second < first:
+                self.addEdge(id, (id//self.size)*self.size)
+            
+            term = (id // self.size) + 1
+            if term != self.size:
+                self.addEdge(id, id+self.size)
+            if term == self.size:
+                self.addEdge(id, (id%self.size))
             #self.addEdge(id, id-1)
             #self.addEdge(id, id - self.size)
 
-x = Lattice_Square(100)
+x = Lattice_Square(32)
 x.build()
 x.saveGraphToFile("lattice.edges")
+print(x.heterogenity())

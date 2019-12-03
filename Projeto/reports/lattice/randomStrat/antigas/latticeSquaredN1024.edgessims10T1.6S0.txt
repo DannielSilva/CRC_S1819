@@ -1,0 +1,1 @@
+latticeSquaredN1024.edges heteroginity: 0.1171875fractionCoop:0.0

@@ -11,7 +11,7 @@ class Cooperation_Simulation:
         print(self.payoff)
         #exit(0)
         self.network = net
-        self.strategy_of_node = self.selectTopHubs(0.2)
+        self.strategy_of_node = self.randomStrategy()
         print(self.strategy_of_node)
        
         self.new_strategy_of_node = self.strategy_of_node
@@ -20,7 +20,7 @@ class Cooperation_Simulation:
         self.fitDelta = 0
 
     def reset_simulation(self):
-        self.strategy_of_node = self.selectTopHubs(0.2)
+        self.strategy_of_node = self.randomStrategy()
         self.new_strategy_of_node = self.strategy_of_node
 
     def randomStrategy(self):
@@ -29,7 +29,7 @@ class Cooperation_Simulation:
         # exit(0)
         return {node: "C" if node in Cs else "D" for node in self.network.graph.keys()}
     
-    def selectTopHubs(self, fraction, niceHubs=True):
+    def selectTopHubs(self, fraction, niceHubs=False):
         d = self.network.degree
         top = round(len(self.network.graph) * fraction)
         hubs = sorted(d, key=d.get)[-top:]
@@ -37,7 +37,10 @@ class Cooperation_Simulation:
         print("lenhubs",len(hubs))
         # exit(0)
         #['3', '10', '19', '9', '6', '5', '11', '8', '1', '0', '2', '7', '4']
-        return {node: "C" if niceHubs and node in hubs else "D" for node in self.network.graph.keys()}
+        if niceHubs:
+            return {node: "C" if node in hubs else "D" for node in self.network.graph.keys()}
+        else:
+            return {node: "D" if node in hubs else "C" for node in self.network.graph.keys()}
 
     def alternateStrategy(self):
         return {node: "C" if int(node)%2 == 0 else "D" for node in self.network.graph.keys()}
@@ -52,9 +55,9 @@ class Cooperation_Simulation:
             self.reset_simulation()
             for g in range(numGes):
                 self.computeFit()
-                if self.fitDelta==0:
-                    print("Someone has taken over")
-                    break
+                # if self.fitDelta==0:
+                #     print("Someone has taken over")
+                #     break
                 numCs = self.iterateReplicatorFormulla(2)
                 frac = numCs / len(self.network.graph)
                 grow.append(frac)
@@ -69,9 +72,10 @@ class Cooperation_Simulation:
                 #print("fitdelta", self.fitDelta)
             self.results.append(numCs / len(self.network.graph))
             plt.plot(grow)
-        plt.title("Regular graph")
+        #plt.title("Regular graph")
         plt.xlabel("Number of Generations")
         plt.ylabel("Fraction of Cooperators")
+        #plt.ylim(0,0.05)
         #plt.show()
         # plt.figure()
         # plt.plot(list(range(len(self.results))),self.results)
@@ -209,7 +213,7 @@ x = graph.Graph()
 string = "baraba_1000.edges"
 x.loadGraphFromFile("../graphs/" + string)
 S = 0
-T = 2.2
+T = 2.18
 
 y = Cooperation_Simulation(x,T,S)
 #print(y.scores)
@@ -221,7 +225,7 @@ res = y.run(10000,sims)
 print("res",res)
 
 
-name = "../reports/barabasi/topHubs/"+string +"sims"+str(sims)+"T" + str(T) + "S" + str(S) + "quantil:" + str(0.2)
+name = "../reports/barabasi/randomStrat/"+string +"sims"+str(sims)+"T" + str(T) + "S" + str(S) 
 report = string + " heteroginity: " + str(x.heterogenity()) + "fractionCoop:" + str(res)
 plt.savefig(name + ".png")
 f = open(name  + ".txt", "w")

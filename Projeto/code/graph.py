@@ -217,8 +217,8 @@ class Graph:
 
 
 # x = Graph()
-# #x.build()
-# x.loadGraphFromFile("../graphs/barabasi250.edges")
+#x.build()
+# x.loadGraphFromFile("../graphs/baraba_2000.edges")
 # print("hete: ",x.heterogenity())
 # degrees = x.degree_dist()
 # #x.plot_info(degrees)

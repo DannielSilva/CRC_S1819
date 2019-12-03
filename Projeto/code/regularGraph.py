@@ -23,7 +23,7 @@ class Regular(graph.Graph):
                         #print("added")
                         self.stubs[node] -= 1
                         self.stubs[viz] -= 1
-                    else:
+                    #else:
                         #print("not", self.graph)
 
                     if self.stubs[node] == 0:
@@ -34,8 +34,9 @@ class Regular(graph.Graph):
                         #print("removed viz", available)
                         available.remove(viz)
 
-# x = Regular(3,10)
-# print(x.graph)
-# x.build()
-# print(x.graph)
-# x.saveGraphToFile("../graphs/regular.edges")
+x = Regular(4,1000)
+print(x.graph)
+x.build()
+print(x.graph)
+x.saveGraphToFile("../graphs/regular.edges")
+print("het",x.heterogenity())
