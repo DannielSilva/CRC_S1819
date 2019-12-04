@@ -53,10 +53,10 @@ class Erdos_Renyi_Graph(graph.Graph):
     
     def small_world(self):
         return log(len(self.graph)) / log(self.averageDegree())
-
-x = Erdos_Renyi_Graph(1/20, 200)
-x.build()
-string = "../graphs/erdos_" + str(nodes)+ ".edges"
-x.saveGraphToFile(string)
+# nodes = 200
+# x = Erdos_Renyi_Graph(1/20, nodes)
+# x.build()
+# string = "../graphs/erdos_" + str(nodes)+ ".edges"
+# x.saveGraphToFile(string)
 
 

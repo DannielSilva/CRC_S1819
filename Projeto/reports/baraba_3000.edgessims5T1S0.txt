@@ -1,0 +1,1 @@
+baraba_3000.edges heteroginity: 30.649562960691092fractionDef:1.0

@@ -1,0 +1,1 @@
+init_5_m_as_5_baraba_1000.edges heteroginity: 110.09463132100693fractionCoop:1.0
