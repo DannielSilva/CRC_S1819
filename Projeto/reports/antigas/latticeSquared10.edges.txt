@@ -1,1 +1,0 @@
-latticeSquared10.edges heteroginity: 0.3199999999999985  ,   fractionDef = 0.6333333333333333

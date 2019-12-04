@@ -3,7 +3,7 @@ import random
 import erdos
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.linear_model import LinearRegression
+#from sklearn.linear_model import LinearRegression
 
 class Barabasi_Albert_Graph(graph.Graph):
 
@@ -74,11 +74,11 @@ class Barabasi_Albert_Graph(graph.Graph):
         plt.show()
         plt.clf()
 
-nodes = 2000
-x = Barabasi_Albert_Graph(2,2,nodes)
-x.build()
-string = "../graphs/baraba_" + str(nodes)+ ".edges"
-x.saveGraphToFile(string)
+# nodes = 1000
+# x = Barabasi_Albert_Graph(5,5,nodes)
+# x.build()
+# string = "../graphs/init_5_m_as_5_baraba_" + str(nodes) + ".edges"
+# x.saveGraphToFile(string)
 #degrees = x.degree_dist()
 #x.plot_info(degrees)
 #x.loglogplot(degrees)

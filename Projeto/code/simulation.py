@@ -8,11 +8,11 @@ class Cooperation_Simulation:
     def __init__(self, net, value_T=2, value_S=-1):
         self.options = ["C","D"]
         self.payoff = {"C-C":1, "C-D":value_S, "D-D":0, "D-C": value_T} #R,S,P,T
-        print(self.payoff)
+        #print(self.payoff)
         #exit(0)
         self.network = net
         self.strategy_of_node = self.randomStrategy()
-        print(self.strategy_of_node)
+        #print(self.strategy_of_node)
        
         self.new_strategy_of_node = self.strategy_of_node
         self.scores = {node: 0 for node in self.network.graph.keys()}
@@ -33,8 +33,8 @@ class Cooperation_Simulation:
         d = self.network.degree
         top = round(len(self.network.graph) * fraction)
         hubs = sorted(d, key=d.get)[-top:]
-        print("hubs",hubs)
-        print("lenhubs",len(hubs))
+        #print("hubs",hubs)
+        #print("lenhubs",len(hubs))
         # exit(0)
         #['3', '10', '19', '9', '6', '5', '11', '8', '1', '0', '2', '7', '4']
         if niceHubs:
@@ -209,13 +209,13 @@ class Cooperation_Simulation:
 
 
 
-x = graph.Graph()
-string = "baraba_1000.edges"
-x.loadGraphFromFile("../graphs/" + string)
+network = graph.Graph()
+network_name = "init_5_m_as_5_baraba_1000.edges"
+network.loadGraphFromFile("../graphs/" + network_name)
 S = 0
-T = 2.16
+T = 1.8
 
-y = Cooperation_Simulation(x,T,S)
+y = Cooperation_Simulation(network,T,S)
 #print(y.scores)
 #y.computeFit()
 #print(y.scores)
@@ -225,8 +225,8 @@ res = y.run(100000,sims)
 print("res",res)
 
 
-name = "../reports/barabasi/randomStrat/"+string +"sims"+str(sims)+"T" + str(T) + "S" + str(S) 
-report = string + " heteroginity: " + str(x.heterogenity()) + "fractionCoop:" + str(res)
+name = "../reports/barabasi/randomStrat/"+network_name +"sims"+str(sims)+"T" + str(T) + "S" + str(S) 
+report = network_name + " heteroginity: " + str(network.heterogenity()) + "fractionCoop:" + str(res)
 plt.savefig(name + ".png")
 f = open(name  + ".txt", "w")
 f.write(report)
@@ -234,8 +234,3 @@ f.close()
 #beta = 0.1
 #print(y.iterateReplicatorFormulla(10))
 #print(sum( value == "D" for value in y.strategy_of_node.values()))
-
-#Introduzir um erro, fazer tipo uma funcao q faz o switch de C para D
-#em vez de fazer o switch em cada iterate
-
-#os graus do random e da scale free têm de ser iguais
