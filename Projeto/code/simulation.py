@@ -213,7 +213,7 @@ x = graph.Graph()
 string = "baraba_1000.edges"
 x.loadGraphFromFile("../graphs/" + string)
 S = 0
-T = 2.18
+T = 2.16
 
 y = Cooperation_Simulation(x,T,S)
 #print(y.scores)
@@ -221,7 +221,7 @@ y = Cooperation_Simulation(x,T,S)
 #print(y.scores)
 #y.iterateGreedNeig()
 sims = 10
-res = y.run(10000,sims)
+res = y.run(100000,sims)
 print("res",res)
 
 

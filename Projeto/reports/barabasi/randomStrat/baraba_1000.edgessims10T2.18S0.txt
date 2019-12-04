@@ -1,1 +1,1 @@
-baraba_1000.edges heteroginity: 26.94806793598432fractionCoop:0.8971057884231536
+baraba_1000.edges heteroginity: 26.94806793598432fractionCoop:0.9330339321357286
